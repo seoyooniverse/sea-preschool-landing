@@ -318,9 +318,9 @@ export default function LandingPage() {
       <SectionShell id="curriculum" className="border-y border-line">
         <Reveal>
           <SectionLabel>Curriculum</SectionLabel>
-          <h2 className="max-w-[620px] text-[clamp(1.65rem,3.5vw,3.7rem)] font-black leading-[1.18] [word-break:keep-all]">
-            <span className="block">시장 분석부터 발표까지,</span>
-            <span className="block">하나의 프로젝트로.</span>
+          <h2 className="max-w-[620px] text-[clamp(1.38rem,6.2vw,3.7rem)] font-black leading-[1.2] [word-break:keep-all] sm:text-[clamp(1.65rem,3.5vw,3.7rem)]">
+            <span className="block whitespace-nowrap">시장 분석부터 발표까지,</span>
+            <span className="block whitespace-nowrap">하나의 프로젝트로.</span>
           </h2>
         </Reveal>
         <div className="mt-10 grid gap-x-10 gap-y-0 md:grid-cols-2">
