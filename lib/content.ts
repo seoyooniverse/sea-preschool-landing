@@ -18,7 +18,7 @@ export const heroPoints = [
 export const proofPoints = [
   {
     title: "현업 제작 환경",
-    body: "엠피아 스튜디오에서 실제 제작 현장의 흐름을 경험합니다.",
+    body: "스튜디오에서 실제 제작 현장의 흐름을 경험합니다.",
   },
   {
     title: "현업 PD 관점",
@@ -39,7 +39,7 @@ export const guarantees = [
   "디지털 배지 발급",
   "명지대학교 4년제 정규학과 편입 개런티 및 가산점 반영",
   "우수 기획서 3~5명 현직 A&R 팀장급 대면 피드백",
-  "엠피아 스튜디오 현장체험",
+  "스튜디오 현장체험",
 ];
 
 export const painPoints = [
@@ -154,6 +154,6 @@ export const academicSchedule = [
 
 export const featuredWeeks = [
   { week: "Week 06", date: "추후 협의", title: "프리프로덕션 워크숍", type: "오프라인" },
-  { week: "Week 10", date: "추후 협의", title: "엠피아 스튜디오 라이브", type: "오프라인" },
+  { week: "Week 10", date: "추후 협의", title: "스튜디오 라이브", type: "오프라인" },
   { week: "Week 16", date: "추후 협의", title: "최종 발표 & A&R 피드백", type: "오프라인" },
 ];
