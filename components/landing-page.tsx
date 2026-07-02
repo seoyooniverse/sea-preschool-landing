@@ -64,8 +64,8 @@ export default function LandingPage() {
 
       <header className="fixed inset-x-0 top-0 z-40 border-b border-line bg-ink/70 backdrop-blur-xl">
         <nav aria-label="Main navigation" className="mx-auto flex h-16 max-w-page items-center justify-between px-[var(--page-x)]">
-          <a href="#" className="text-sm font-black uppercase tracking-[0.18em]">
-            MJU x SEA
+          <a href="#" className="brand-logo text-[13px] leading-tight text-bone sm:text-sm">
+            MJU x SEA &apos;엔터 취업 포트폴리오&apos;
           </a>
           <div className="hidden items-center gap-7 md:flex">
             {navItems.map((item) => (

@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Paperlogy";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2502-1@1.0/Paperlogy-7Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   color-scheme: dark;
   background: #0a0a0a;
@@ -72,4 +80,9 @@ select {
 
 .hairline {
   border-color: rgba(255, 255, 255, 0.08);
+}
+
+.brand-logo {
+  font-family: "Paperlogy", "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-weight: 700;
 }
