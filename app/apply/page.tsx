@@ -61,7 +61,7 @@ export default function ApplyPage() {
               <span className="block text-smoke">MJU x SEA</span>
             </h1>
             <p className="mt-6 max-w-[520px] text-base font-medium leading-7 text-muted">
-              기본 정보를 남겨주시면 운영팀이 신청 내용을 확인합니다. 수강료 입금 확인 후 최종 등록이 완료됩니다.
+              기본 정보를 남겨주시면 운영팀이 신청 내용을 확인합니다. 월 수강료 입금 확인 후 최종 등록이 완료됩니다.
             </p>
 
             <div className="mt-10 border-y border-line py-7">
@@ -85,7 +85,7 @@ export default function ApplyPage() {
                 </div>
               </dl>
               <p className="mt-5 text-xs font-medium leading-5 text-muted">
-                입금자명은 신청자명과 동일하게 입력해주세요. 확인이 필요한 경우 운영팀에서 개별 연락드립니다.
+                월 수강료 기준 금액입니다. 입금자명은 신청자명과 동일하게 입력해주세요. 확인이 필요한 경우 운영팀에서 개별 연락드립니다.
               </p>
             </div>
           </div>
