@@ -61,11 +61,11 @@ export default function ApplyPage() {
               <span className="block text-smoke">MJU x SEA</span>
             </h1>
             <p className="mt-6 max-w-[520px] text-base font-medium leading-7 text-muted">
-              기본 정보를 남겨주시면 운영팀이 신청 내용을 확인합니다. 첫 달 수강료 입금 확인 후 최종 등록이 완료됩니다.
+              기본 정보를 남겨주시면 운영팀이 신청 내용을 확인합니다. 신청 시 입금액 확인 후 최종 등록이 완료됩니다.
             </p>
 
             <div className="mt-10 border-y border-line py-7">
-              <p className="text-sm font-black text-signal">수강료 안내</p>
+              <p className="text-sm font-black text-signal">입금 안내</p>
               <dl className="mt-5 grid gap-3 text-sm">
                 <div className="flex justify-between gap-4">
                   <dt className="text-muted">금액</dt>
@@ -85,7 +85,7 @@ export default function ApplyPage() {
                 </div>
               </dl>
               <p className="mt-5 text-xs font-medium leading-5 text-muted">
-                월 15만원, 4개월 과정입니다. 신청 시 첫 달 수강료 15만원을 입금해주세요. 입금자명은 신청자명과 동일하게 입력해주세요.
+                본 과정은 월 15만원, 4개월 과정입니다. 신청서 제출 후 150,000원을 입금하면 등록 확인이 진행됩니다. 입금자명은 신청자명과 동일하게 입력해주세요.
               </p>
             </div>
           </div>

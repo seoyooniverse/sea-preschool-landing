@@ -36,8 +36,8 @@ export async function notifyNewApplication(application: Application) {
 
   const text = [
     `${application.name}님, SEA 프리스쿨 과정 신청이 접수되었습니다.`,
-    "운영팀 확인 후 등록 안내를 보내드릴게요.",
-    "첫 달 수강료 15만원 입금 시 입금자명은 신청자명과 동일하게 진행해주세요.",
+    "신청 시 입금액 15만원 확인 후 등록 안내를 보내드릴게요.",
+    "입금자명은 신청자명과 동일하게 진행해주세요.",
     `접수번호: ${application.id.slice(0, 8)}`,
   ].join("\n");
 

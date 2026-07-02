@@ -1,6 +1,6 @@
 export const bankInfo = {
-  bank: "은행명 입력",
-  account: "계좌번호 입력",
-  holder: "예금주 입력",
-  amount: "첫 달 수강료 150,000원",
+  bank: "카카오뱅크",
+  account: "3333336470894",
+  holder: "에스이에이",
+  amount: "신청 시 입금액 150,000원",
 };

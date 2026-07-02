@@ -23,7 +23,7 @@ export default async function CompletePage({ searchParams }: CompletePageProps) 
               <span className="block text-smoke">등록 안내를 확인해주세요.</span>
             </h1>
             <p className="mt-7 max-w-[560px] text-base font-medium leading-7 text-muted">
-              신청 내용을 확인한 뒤, 첫 달 수강료 입금 확인까지 완료되면 최종 등록 안내를 보내드립니다.
+              신청 내용을 확인한 뒤, 신청 시 입금액 확인까지 완료되면 최종 등록 안내를 보내드립니다.
             </p>
             {params.id ? (
               <p className="mt-5 text-xs font-semibold text-muted">접수번호: {params.id}</p>
@@ -54,7 +54,7 @@ export default async function CompletePage({ searchParams }: CompletePageProps) 
             <div className="mt-8 border-t border-line pt-6">
               <p className="text-sm font-black text-bone">다음 단계</p>
               <ol className="mt-4 grid gap-3 text-sm font-medium leading-6 text-muted">
-                <li>1. 신청자명과 동일한 입금자명으로 첫 달 수강료 15만원을 입금해주세요.</li>
+                <li>1. 신청자명과 동일한 입금자명으로 150,000원을 입금해주세요.</li>
                 <li>2. 운영팀이 신청서와 입금 내역을 확인합니다.</li>
                 <li>3. 최종 등록 안내가 문자 또는 이메일로 발송됩니다.</li>
               </ol>
