@@ -273,7 +273,7 @@ export default function LandingPage() {
           </Reveal>
           <Reveal delay={0.12}>
             <p className="text-base font-medium leading-7 text-smoke sm:text-lg sm:leading-8">
-              엠피아 스튜디오, 프로젝트 미팅, 현업 피드백까지.
+              스튜디오 체험, 프로젝트 미팅, 현업 피드백까지.
             </p>
             <div className="mt-9 grid gap-3 text-sm font-black uppercase tracking-[0.16em] text-bone">
               <span>ONLINE x OFFLINE</span>
