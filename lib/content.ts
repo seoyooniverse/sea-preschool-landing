@@ -10,7 +10,7 @@ export const navItems = [
 
 export const heroPoints = [
   "지원서에 쓸 실무 근거",
-  "엠피아 스튜디오 현장 경험",
+  "스튜디오 현장 경험",
   "SM·JYP 등 업계 선배 피드백",
   "명지대 편입 트랙",
 ];
