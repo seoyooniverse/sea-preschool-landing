@@ -225,7 +225,7 @@ export default function LandingPage() {
           <Reveal>
             <SectionLabel>Portfolio Journey</SectionLabel>
             <h2 className="text-[clamp(2rem,4.8vw,4.8rem)] font-black leading-[1.1] [word-break:keep-all]">
-              팬심은 이렇게 실무 언어가 됩니다.
+              팬심은 이렇게 <span className="text-signal">&apos;실무 언어&apos;</span>가 됩니다.
             </h2>
           </Reveal>
           <div className="space-y-3">
@@ -308,7 +308,9 @@ export default function LandingPage() {
           <SectionLabel>Curriculum</SectionLabel>
           <h2 className="max-w-[620px] text-[clamp(1.38rem,6.2vw,3.7rem)] font-black leading-[1.2] [word-break:keep-all] sm:text-[clamp(1.65rem,3.5vw,3.7rem)]">
             <span className="block whitespace-nowrap">시장 분석부터 발표까지,</span>
-            <span className="block whitespace-nowrap">하나의 프로젝트로.</span>
+            <span className="block whitespace-nowrap">
+              <span className="text-signal">&apos;하나의 프로젝트&apos;</span>로.
+            </span>
           </h2>
         </Reveal>
         <div className="mt-10 grid gap-x-10 gap-y-0 md:grid-cols-2">
@@ -377,8 +379,12 @@ export default function LandingPage() {
           <Reveal>
             <SectionLabel>Guarantee & Price</SectionLabel>
             <h2 className="text-[clamp(2rem,4.8vw,4.8rem)] font-black leading-[1.1] [word-break:keep-all]">
-              <span className="block">가격은 가볍게,</span>
-              <span className="block">혜택은 확실하게.</span>
+              <span className="block">
+                가격은 <span className="text-signal">&apos;가볍게,&apos;</span>
+              </span>
+              <span className="block">
+                혜택은 <span className="text-signal">&apos;확실하게.&apos;</span>
+              </span>
             </h2>
           </Reveal>
           <Reveal delay={0.08}>
