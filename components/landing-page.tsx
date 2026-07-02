@@ -297,7 +297,7 @@ export default function LandingPage() {
             </div>
             <div className="border-t border-signal pt-7">
               <p className="text-sm font-bold text-signal">MJU x SEA</p>
-              <p className="mt-3 text-2xl font-black">기획한다 → 만든다 → 면접에서 말한다</p>
+              <p className="mt-3 text-2xl font-black">기획한다 → 만든다 → 나를 증명한다</p>
             </div>
           </Reveal>
         </div>
