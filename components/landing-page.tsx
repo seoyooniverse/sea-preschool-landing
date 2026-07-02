@@ -134,15 +134,6 @@ export default function LandingPage() {
         </a>
       </section>
 
-      <section aria-label="Program atmosphere" className="mx-auto grid max-w-page gap-4 px-[var(--page-x)] pb-8 md:grid-cols-[1.1fr_0.9fr] lg:pb-14">
-        <Reveal className="relative min-h-[260px] overflow-hidden border border-line md:min-h-[420px]">
-          <Image src="/studio-photo.png" alt="엔터테인먼트 제작 스튜디오 콘솔과 마이크" fill sizes="(min-width: 768px) 55vw, 100vw" className="object-cover" />
-        </Reveal>
-        <Reveal delay={0.08} className="relative min-h-[220px] overflow-hidden border border-line md:mt-16 md:min-h-[360px]">
-          <Image src="/backstage-photo.png" alt="무대 뒤 백스테이지로 들어가는 크리에이터들" fill sizes="(min-width: 768px) 45vw, 100vw" className="object-cover" />
-        </Reveal>
-      </section>
-
       <SectionShell id="proof" className="border-y border-line">
         <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
           <Reveal>
@@ -161,19 +152,6 @@ export default function LandingPage() {
           </div>
         </div>
       </SectionShell>
-
-      <section aria-label="Field image sequence" className="mx-auto grid max-w-page gap-4 px-[var(--page-x)] py-8 sm:grid-cols-2 lg:grid-cols-4 lg:py-14">
-        {[
-          { src: "/planning-photo.png", alt: "아티스트 콘셉트 기획 자료를 정리하는 제작 미팅 장면" },
-          { src: "/vocal-booth-photo.png", alt: "보컬 녹음 부스와 마이크" },
-          { src: "/studio-photo.png", alt: "음악 제작 스튜디오 콘솔" },
-          { src: "/backstage-photo.png", alt: "백스테이지 현장으로 이동하는 크리에이터들" },
-        ].map((image, index) => (
-          <Reveal key={image.src} delay={index * 0.04} className="relative min-h-[240px] overflow-hidden border border-line sm:min-h-[320px]">
-            <Image src={image.src} alt={image.alt} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
-          </Reveal>
-        ))}
-      </section>
 
       <SectionShell id="problem">
         <Reveal className="max-w-[980px]">
@@ -195,7 +173,7 @@ export default function LandingPage() {
       </SectionShell>
 
       <SectionShell>
-        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
           <Reveal>
             <SectionLabel>Solution</SectionLabel>
             <h2 className="text-[clamp(2.1rem,5vw,5rem)] font-black leading-[1.1] [word-break:keep-all]">
@@ -210,6 +188,16 @@ export default function LandingPage() {
             <p className="mt-5 text-xl font-black leading-snug">
               마지막에는 “제가 이런 걸 만들었습니다”라고 말할 수 있어야 하니까.
             </p>
+          </Reveal>
+          <Reveal delay={0.16} className="relative min-h-[260px] overflow-hidden border border-line sm:min-h-[360px] lg:min-h-[460px]">
+            <Image
+              src="/planning-photo.png"
+              alt="아티스트 콘셉트 기획 자료를 정리하는 제작 미팅 장면"
+              fill
+              sizes="(min-width: 1024px) 48vw, 100vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
           </Reveal>
         </div>
       </SectionShell>
