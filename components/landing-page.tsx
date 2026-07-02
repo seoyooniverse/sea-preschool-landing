@@ -109,7 +109,7 @@ export default function LandingPage() {
 
           <FadeIn delay={0.12} className="max-w-read lg:pb-3">
             <p className="max-w-[520px] text-[15px] font-medium leading-7 text-smoke sm:text-lg">
-              좋아하는 아티스트를 분석하는 데서 끝나지 않고, 지원서와 면접에서 꺼낼 수 있는 작업물로 만듭니다.
+              좋아하는 마음을 취업 언어로 바꾸고, 지원서에서 보여줄 수 있는 결과물로 남깁니다.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <CTA>지원하기</CTA>
@@ -139,7 +139,7 @@ export default function LandingPage() {
           <Reveal>
             <SectionLabel>Industry Proof</SectionLabel>
             <h2 className="max-w-[680px] text-[clamp(2rem,4.8vw,4.8rem)] font-black leading-[1.1] [word-break:keep-all]">
-              업계가 보는 방식으로
+              업계가 평가하는 방식으로
             </h2>
           </Reveal>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -183,10 +183,10 @@ export default function LandingPage() {
           </Reveal>
           <Reveal delay={0.1} className="max-w-read">
             <p className="text-base font-medium leading-7 text-smoke sm:text-lg sm:leading-8">
-              하나의 아티스트를 정하고, 시장·브랜드·사운드·비주얼·마케팅을 한 흐름으로 설계합니다.
+              하나의 아티스트를 정하고, 시장·브랜드·사운드·비주얼·마케팅을 하나의 흐름으로 설계합니다.
             </p>
             <p className="mt-5 text-xl font-black leading-snug">
-              마지막에는 “제가 이런 걸 만들었습니다”라고 말할 수 있어야 하니까.
+              마지막에는 “제가 만든 결과물입니다”라고 보여줄 수 있어야 하니까.
             </p>
           </Reveal>
           <Reveal delay={0.16} className="relative min-h-[260px] overflow-hidden border border-line sm:min-h-[360px] lg:min-h-[460px]">
@@ -293,11 +293,11 @@ export default function LandingPage() {
           <Reveal delay={0.1} className="space-y-8">
             <div className="border-t border-line pt-7">
               <p className="text-sm font-bold text-muted">일반 강의</p>
-              <p className="mt-3 text-2xl font-black text-muted">듣는다 → 기억에서 사라진다</p>
+              <p className="mt-3 text-2xl font-black text-muted">듣는다 → 금방 흐려진다</p>
             </div>
             <div className="border-t border-signal pt-7">
               <p className="text-sm font-bold text-signal">MJU x SEA</p>
-              <p className="mt-3 text-2xl font-black">기획한다 → 만든다 → 나를 증명한다</p>
+              <p className="mt-3 text-2xl font-black">기획한다 → 만든다 → 나를 보여준다</p>
             </div>
           </Reveal>
         </div>
@@ -333,7 +333,7 @@ export default function LandingPage() {
             <BadgeCheck aria-hidden="true" className="mb-8 h-12 w-12 text-signal" />
             <p className="text-base font-medium leading-7 text-smoke sm:text-lg sm:leading-8">
               수료생 전원에게 명지대학교 미래융합대학 공식 수료증과 디지털 배지가 발급됩니다.
-              편입 개런티 및 가산점 반영 트랙까지 함께 안내됩니다.
+              4년제 정규학과 편입 개런티 및 가산점 반영 트랙까지 함께 안내됩니다.
             </p>
             <p className="mt-5 text-sm font-semibold leading-6 text-muted">
               우수 기획서 선정자 3~5명에게는 현직 기획사 A&R 팀장급 대면 피드백 기회가 제공됩니다.
@@ -425,10 +425,10 @@ export default function LandingPage() {
           <h2 className="mx-auto max-w-[700px] text-[clamp(2.1rem,5.2vw,5rem)] font-black leading-[1.14] [word-break:keep-all]">
             <span className="block">16주 뒤,</span>
             <span className="block">“엔터 좋아해요”가 아니라</span>
-            <span className="block text-smoke">“이걸 만들었어요.”</span>
+            <span className="block text-smoke">“제가 만들었습니다.”</span>
           </h2>
           <p className="mx-auto mt-7 max-w-[560px] text-base font-medium leading-7 text-muted">
-            관심을 증거로 바꾸는 첫 번째 프로젝트.
+            관심을 결과물로 바꾸는 첫 번째 프로젝트.
           </p>
           <div className="mt-10 flex justify-center">
             <CTA>지원하기</CTA>
