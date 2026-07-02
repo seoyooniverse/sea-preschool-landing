@@ -24,7 +24,7 @@ function CTA({ href = "/apply", children, variant = "primary" }: { href?: string
     <a
       href={href}
       className={[
-        "group inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold outline-none transition duration-300 focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 focus-visible:ring-offset-ink",
+        "group inline-flex min-h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-bold outline-none transition duration-300 focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 focus-visible:ring-offset-ink",
         variant === "primary"
           ? "bg-bone text-ink hover:bg-signal hover:text-bone"
           : "border border-line bg-transparent text-bone hover:border-bone",

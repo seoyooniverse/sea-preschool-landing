@@ -29,7 +29,7 @@ export default function CurriculumPage() {
 
         <section className="border-y border-line">
           {curriculumWeeks.map((item, index) => (
-            <article key={item.week} className="grid gap-5 border-b border-line py-7 last:border-b-0 md:grid-cols-[130px_1fr]">
+            <article key={item.week} className="grid gap-5 border-b border-line py-7 last:border-b-0 lg:grid-cols-[130px_1fr_220px]">
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.16em] text-signal">{item.week}</p>
                 <p className="mt-2 text-sm font-semibold text-muted">{String(index + 1).padStart(2, "0")} / 16</p>
@@ -37,6 +37,11 @@ export default function CurriculumPage() {
               <div>
                 <h2 className="text-2xl font-black leading-tight [word-break:keep-all]">{item.title}</h2>
                 <p className="mt-3 max-w-[760px] text-sm font-medium leading-6 text-muted sm:text-base sm:leading-7">{item.detail}</p>
+              </div>
+              <div className="grid content-start gap-2 text-sm font-bold">
+                <p className="text-bone">{item.date}</p>
+                <p className="text-muted">{item.time}</p>
+                <p className={item.mode === "오프라인" ? "text-signal" : "text-smoke"}>{item.mode}</p>
               </div>
             </article>
           ))}
@@ -48,7 +53,7 @@ export default function CurriculumPage() {
           </p>
           <Link
             href="/apply"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-bone px-6 text-sm font-black text-ink transition hover:bg-signal hover:text-bone"
+            className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-bone px-8 text-base font-black text-ink transition hover:bg-signal hover:text-bone"
           >
             지원하기
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
