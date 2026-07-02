@@ -85,7 +85,7 @@ export default function ApplyPage() {
                 </div>
               </dl>
               <p className="mt-5 text-xs font-medium leading-5 text-muted">
-                월 수강료 기준 금액입니다. 입금자명은 신청자명과 동일하게 입력해주세요. 확인이 필요한 경우 운영팀에서 개별 연락드립니다.
+                4개월 과정의 월 수강료 기준 금액입니다. 입금자명은 신청자명과 동일하게 입력해주세요. 확인이 필요한 경우 운영팀에서 개별 연락드립니다.
               </p>
             </div>
           </div>

@@ -385,6 +385,7 @@ export default function LandingPage() {
             <div className="border-y border-line py-8">
               <p className="text-sm font-black uppercase tracking-[0.18em] text-signal">Course Fee</p>
               <p className="mt-3 text-[clamp(2.8rem,8vw,6.5rem)] font-black leading-none">월 15만원</p>
+              <p className="mt-3 text-lg font-black text-smoke">4개월 과정</p>
               <p className="mt-4 text-sm font-medium leading-6 text-muted">
                 현장체험, 피드백, 수료 인증, 편입 트랙까지 포함한 월 수강료입니다.
               </p>
