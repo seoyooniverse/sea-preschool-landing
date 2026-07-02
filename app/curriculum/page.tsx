@@ -49,7 +49,7 @@ export default function CurriculumPage() {
 
         <section className="flex flex-col gap-5 py-12 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-[520px] text-base font-bold leading-7 text-smoke">
-            16주 후, 좋아하는 마음은 지원서에 넣을 수 있는 결과물로 남습니다.
+            16주 뒤, 관심은 보여줄 수 있는 결과물이 됩니다.
           </p>
           <Link
             href="/apply"
