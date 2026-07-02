@@ -7,13 +7,12 @@ function getSolapiConfig() {
   const apiKey = process.env.SOLAPI_API_KEY;
   const apiSecret = process.env.SOLAPI_API_SECRET;
   const from = process.env.SOLAPI_FROM;
-  const to = process.env.SOLAPI_TO;
 
-  if (!apiKey || !apiSecret || !from || !to) {
+  if (!apiKey || !apiSecret || !from) {
     return null;
   }
 
-  return { apiKey, apiSecret, from, to };
+  return { apiKey, apiSecret, from };
 }
 
 function normalizePhone(value: string) {
@@ -36,12 +35,10 @@ export async function notifyNewApplication(application: Application) {
   }
 
   const text = [
-    "[SEA 프리스쿨 신청 접수]",
-    `이름: ${application.name}`,
-    `연락처: ${application.phone}`,
-    `관심 직무: ${application.interest}`,
-    `상태: ${application.status}`,
-    `접수번호: ${application.id}`,
+    `${application.name}님, SEA 프리스쿨 과정 신청이 접수되었습니다.`,
+    "운영팀 확인 후 등록 안내를 보내드릴게요.",
+    "입금자명은 신청자명과 동일하게 진행해주세요.",
+    `접수번호: ${application.id.slice(0, 8)}`,
   ].join("\n");
 
   const response = await fetch(SOLAPI_ENDPOINT, {
@@ -52,7 +49,7 @@ export async function notifyNewApplication(application: Application) {
     },
     body: JSON.stringify({
       message: {
-        to: normalizePhone(config.to),
+        to: normalizePhone(application.phone),
         from: normalizePhone(config.from),
         text,
       },

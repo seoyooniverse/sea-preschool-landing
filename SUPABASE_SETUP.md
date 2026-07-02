@@ -36,12 +36,11 @@ ADMIN_KEY=관리자페이지비밀번호
 SOLAPI_API_KEY=Solapi API key
 SOLAPI_API_SECRET=Solapi API secret
 SOLAPI_FROM=Solapi에 등록된 발신번호
-SOLAPI_TO=신청 알림을 받을 운영자 휴대폰번호
 ```
 
 `SUPABASE_SERVICE_ROLE_KEY`는 브라우저에 노출하면 안 됩니다. 이 프로젝트에서는 서버 코드에서만 사용합니다.
 
-`SOLAPI_FROM`은 Solapi에 등록/승인된 발신번호여야 합니다. 번호는 `01012345678`처럼 숫자만 넣는 형식을 권장합니다.
+`SOLAPI_FROM`은 Solapi에 등록/승인된 발신번호여야 합니다. 신청서 제출자 연락처로 접수 완료 문자가 발송됩니다. 번호는 `01012345678`처럼 숫자만 넣는 형식을 권장합니다.
 
 ## 3. Check pages
 
