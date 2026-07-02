@@ -314,13 +314,18 @@ export default function LandingPage() {
           </h2>
         </Reveal>
         <div className="mt-10 grid gap-x-10 gap-y-0 md:grid-cols-2">
-          {curriculum.slice(0, 8).map((item, index) => (
+          {curriculum.map((item, index) => (
             <Reveal key={item} delay={(index % 4) * 0.03} className="flex gap-5 border-t border-line py-4">
               <span className="w-10 shrink-0 text-sm font-black text-signal">{String(index + 1).padStart(2, "0")}</span>
               <p className="text-base font-black leading-snug">{item}</p>
             </Reveal>
           ))}
         </div>
+        <Reveal delay={0.12} className="mt-10">
+          <CTA href="/curriculum" variant="secondary">
+            상세 커리큘럼 보기
+          </CTA>
+        </Reveal>
       </SectionShell>
 
       <SectionShell>
