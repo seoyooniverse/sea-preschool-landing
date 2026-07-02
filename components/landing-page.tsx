@@ -257,9 +257,8 @@ export default function LandingPage() {
       <SectionShell>
         <Reveal>
           <SectionLabel>Outputs</SectionLabel>
-          <h2 className="max-w-[680px] text-[clamp(2.2rem,5vw,5rem)] font-black leading-[1.08]">
-            <span className="block">매주 하나씩,</span>
-            <span className="block">내 포트폴리오를 채웁니다.</span>
+          <h2 className="max-w-[720px] text-[clamp(1.9rem,4.2vw,4.35rem)] font-black leading-[1.14] [word-break:keep-all]">
+            매주 내 포트폴리오를 채웁니다.
           </h2>
         </Reveal>
         <Reveal delay={0.1} className="mt-10 flex flex-wrap gap-3">
@@ -319,9 +318,8 @@ export default function LandingPage() {
       <SectionShell id="curriculum" className="border-y border-line">
         <Reveal>
           <SectionLabel>Curriculum</SectionLabel>
-          <h2 className="max-w-[720px] text-[clamp(2.2rem,5vw,5rem)] font-black leading-[1.08]">
-            <span className="block">시장 분석부터 최종 발표까지,</span>
-            <span className="block">하나의 데뷔 프로젝트처럼.</span>
+          <h2 className="max-w-[760px] text-[clamp(1.9rem,4.2vw,4.35rem)] font-black leading-[1.14] [word-break:keep-all]">
+            시장 분석부터 발표까지, 하나의 데뷔 프로젝트처럼.
           </h2>
         </Reveal>
         <div className="mt-10 grid gap-x-10 gap-y-0 md:grid-cols-2">
