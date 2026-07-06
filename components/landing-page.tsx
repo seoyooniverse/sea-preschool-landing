@@ -7,6 +7,7 @@ import {
   academicSchedule,
   curriculum,
   faqs,
+  faculty,
   featuredWeeks,
   guarantees,
   heroPoints,
@@ -67,7 +68,7 @@ export default function LandingPage() {
           <a href="#" className="brand-logo text-[13px] leading-tight text-bone sm:text-sm">
             MJU x SEA &apos;엔터 취업 포트폴리오&apos;
           </a>
-          <div className="hidden items-center gap-7 md:flex">
+          <div className="hidden items-center gap-5 md:flex lg:gap-7">
             {navItems.map((item) => (
               <a key={item.href} href={item.href} className="text-xs font-semibold text-muted transition hover:text-bone">
                 {item.label}
@@ -326,6 +327,36 @@ export default function LandingPage() {
             상세 커리큘럼 보기
           </CTA>
         </Reveal>
+      </SectionShell>
+
+      <SectionShell id="faculty" className="border-y border-line">
+        <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+          <Reveal>
+            <SectionLabel>Faculty</SectionLabel>
+            <h2 className="text-[clamp(2rem,4.8vw,4.8rem)] font-black leading-[1.1] [word-break:keep-all]">
+              현업과 학계를 아는 사람에게 배웁니다.
+            </h2>
+          </Reveal>
+          <div className="divide-y divide-line border-y border-line">
+            {faculty.map((person, index) => (
+              <Reveal key={person.name} delay={index * 0.05} className="grid gap-5 py-7 lg:grid-cols-[0.7fr_1fr]">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-signal">{String(index + 1).padStart(2, "0")}</p>
+                  <h3 className="mt-4 text-2xl font-black leading-tight">{person.name}</h3>
+                  <p className="mt-2 text-sm font-bold leading-6 text-smoke">{person.role}</p>
+                  <p className="mt-4 text-sm font-semibold leading-6 text-muted">{person.focus}</p>
+                </div>
+                <ul className="grid content-start gap-2 text-sm font-medium leading-6 text-muted">
+                  {person.points.map((point) => (
+                    <li key={point} className="border-t border-line pt-3 first:border-t-0 first:pt-0">
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+            ))}
+          </div>
+        </div>
       </SectionShell>
 
       <SectionShell>

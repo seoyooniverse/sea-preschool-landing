@@ -3,6 +3,7 @@ export const navItems = [
   { label: "Outcome", href: "#portfolio" },
   { label: "Proof", href: "#proof" },
   { label: "Experience", href: "#experience" },
+  { label: "Faculty", href: "#faculty" },
   { label: "Schedule", href: "#schedule" },
   { label: "Price", href: "#price" },
   { label: "FAQ", href: "#faq" },
@@ -141,6 +142,53 @@ export const curriculumWeeks = [
   { week: "Week 14", date: "2026.10.13(화)", time: "20:00-22:00", mode: "온라인", title: "소셜 마케팅 트렌드 & SEO", detail: "숏폼, 검색, 커뮤니티 확산을 고려한 마케팅 전략을 설계합니다." },
   { week: "Week 15", date: "2026.10.20(화)", time: "20:00-22:00", mode: "온라인", title: "글로벌 역주행 전략", detail: "해외 팬덤과 플랫폼 흐름을 반영한 글로벌 확산 전략을 정리합니다." },
   { week: "Week 16", date: "2026.10.27(화)", time: "별도 안내", mode: "오프라인", title: "최종 기획서 발표 & A&R 피드백", detail: "최종 제안서를 발표하고 현업 기준의 피드백으로 마무리합니다." },
+];
+
+export const faculty = [
+  {
+    name: "문원경 교수",
+    role: "미디어 앤 아트테크놀로지학과 지도교수",
+    focus: "음악산업 정책 · 뮤직테크놀로지 · 문화예술 창업",
+    points: [
+      "상명대학교 뮤직테크놀로지학과 석사·박사",
+      "상명대학교 문화기술대학원 뮤직테크놀로지학과 겸임교수",
+      "서울산업진흥원(SBA) 문화예술분야 창업 멘토",
+      "한국음악산업학회 이사",
+    ],
+  },
+  {
+    name: "한재원 교수",
+    role: "명지대학교 미디어앤아트테크놀로지학과 겸임교수",
+    focus: "아티스트 콘텐츠 · 공연 기획 · 음악 프로덕션",
+    points: [
+      "상명대학교 문화기술대학원 뮤직테크놀로지학과 석사",
+      "Y*엔터테인먼트 기타·음악이론·트레이너",
+      "싱어송라이터 TARIN 활동 및 음원·앨범 발매",
+      "TAKEONE MUSIC 대표, 공연·아티스트 콘텐츠 제작",
+    ],
+  },
+  {
+    name: "이기호 교수",
+    role: "명지대학교 미디어앤아트테크놀로지학과 객원교수",
+    focus: "AI 음악 콘텐츠 · 가상융합콘텐츠 · 콘텐츠 PD",
+    points: [
+      "명지전문대 AI뮤직콘텐츠기획과 겸임교수",
+      "서강대학교 가상융합전문대학원 박사 과정",
+      "상명대학교 문화기술대학원 뮤직테크놀로지학과 석사",
+      "네온템플 스튜디오 대표, 전 콘텐츠 PD",
+    ],
+  },
+  {
+    name: "안서윤 교수",
+    role: "미디어 앤 아트테크놀로지학과 겸임교수",
+    focus: "K-Pop 프로덕션 · 작곡 · 아티스트 프로듀싱",
+    points: [
+      "상명대학교 문화기술대학원 뮤직프로덕션 전공 석사",
+      "현 피아이엔티 대표",
+      "남자 아이돌 데이드림 메인 프로듀서",
+      "Daydream, Roomer, 중국 청춘유니2 Final Round 등 작곡·프로듀싱",
+    ],
+  },
 ];
 
 export const faqs = [
