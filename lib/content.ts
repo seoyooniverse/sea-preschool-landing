@@ -184,7 +184,7 @@ export const faculty = [
     focus: "K-Pop 프로덕션 · 작곡 · 아티스트 프로듀싱",
     points: [
       "상명대학교 문화기술대학원 뮤직테크놀로지학과 석사",
-      "현 피아이엔티 대표",
+      "現 피아이엔티 대표",
       "아이돌 Daydream 메인 프로듀서",
       "Daydream, Roomer, 중국 청춘유니2 Final Round 등 작곡·프로듀싱",
     ],
