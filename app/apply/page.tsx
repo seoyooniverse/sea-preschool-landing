@@ -43,6 +43,7 @@ export default function ApplyPage() {
 
   const inputClass =
     "w-full border border-line bg-transparent px-4 py-3 text-base text-bone outline-none transition placeholder:text-muted focus:border-bone";
+  const selectClass = `${inputClass} [color-scheme:dark] [&_option]:bg-ink [&_option]:text-bone`;
   const labelClass = "mb-2 block text-sm font-black text-smoke";
 
   return (
@@ -106,7 +107,7 @@ export default function ApplyPage() {
               </label>
               <label>
                 <span className={labelClass}>현재 상태 *</span>
-                <select className={inputClass} name="status" required defaultValue="">
+                <select className={selectClass} name="status" required defaultValue="">
                   <option value="" disabled>
                     선택
                   </option>
@@ -128,7 +129,7 @@ export default function ApplyPage() {
               </label>
               <label>
                 <span className={labelClass}>관심 직무 *</span>
-                <select className={inputClass} name="interest" required defaultValue="">
+                <select className={selectClass} name="interest" required defaultValue="">
                   <option value="" disabled>
                     선택
                   </option>
