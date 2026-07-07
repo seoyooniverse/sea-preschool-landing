@@ -80,6 +80,7 @@ export async function notifyNewApplication(application: Application) {
   const config = getSolapiConfig();
 
   if (!config) {
+    console.warn("Solapi notification skipped: missing SOLAPI_API_KEY, SOLAPI_API_SECRET, or SOLAPI_FROM.");
     return;
   }
 

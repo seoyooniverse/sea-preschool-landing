@@ -37,9 +37,11 @@ export async function POST(request: Request) {
   };
 
   await saveApplication(application);
-  notifyNewApplication(application).catch((error) => {
+  try {
+    await notifyNewApplication(application);
+  } catch (error) {
     console.error(error);
-  });
+  }
 
   return NextResponse.json({ id: application.id, message: "지원서가 접수되었습니다." });
 }
