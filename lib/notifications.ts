@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import type { Application } from "@/lib/applications";
+import { bankInfo } from "@/lib/program";
 
 const SOLAPI_ENDPOINT = "https://api.solapi.com/messages/v4/send";
 
@@ -86,8 +87,11 @@ export async function notifyNewApplication(application: Application) {
 
   const applicantText = [
     `${application.name}님, SEA 프리스쿨 과정 신청이 접수되었습니다.`,
-    "신청 시 입금액 15만원 확인 후 등록 안내를 보내드릴게요.",
+    `${bankInfo.amount}`,
+    `${bankInfo.bank} ${bankInfo.account}`,
+    `예금주: ${bankInfo.holder}`,
     "입금자명은 신청자명과 동일하게 진행해주세요.",
+    "입금 확인 후 최종 등록 안내를 보내드릴게요.",
     `접수번호: ${application.id.slice(0, 8)}`,
   ].join("\n");
 
