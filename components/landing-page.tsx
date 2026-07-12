@@ -20,6 +20,8 @@ import {
 } from "@/lib/content";
 import { FadeIn, Reveal } from "@/components/motion";
 
+const kakaoChatUrl = "http://pf.kakao.com/_PNSxoG/chat";
+
 function CTA({ href = "/apply", children, variant = "primary" }: { href?: string; children: React.ReactNode; variant?: "primary" | "secondary" }) {
   return (
     <a
@@ -75,12 +77,22 @@ export default function LandingPage() {
               </a>
             ))}
           </div>
-          <a
-            href="/apply"
-            className="rounded-full border border-line px-4 py-2 text-xs font-bold transition hover:border-bone hover:bg-bone hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
-          >
-            지원하기
-          </a>
+          <div className="flex items-center gap-2">
+            <a
+              href={kakaoChatUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="hidden rounded-full border border-line px-4 py-2 text-xs font-bold text-muted transition hover:border-bone hover:text-bone focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal sm:inline-flex"
+            >
+              문의하기
+            </a>
+            <a
+              href="/apply"
+              className="rounded-full border border-line px-4 py-2 text-xs font-bold transition hover:border-bone hover:bg-bone hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
+            >
+              지원하기
+            </a>
+          </div>
         </nav>
       </header>
 
@@ -457,6 +469,26 @@ export default function LandingPage() {
             </Reveal>
           ))}
         </div>
+      </SectionShell>
+
+      <SectionShell className="border-y border-line">
+        <Reveal className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <SectionLabel>Contact</SectionLabel>
+            <h2 className="max-w-[720px] text-[clamp(2rem,4.8vw,4.8rem)] font-black leading-[1.1] [word-break:keep-all]">
+              아직 고민 중이라면,
+              <span className="block text-smoke">카카오톡으로 먼저 물어보세요.</span>
+            </h2>
+          </div>
+          <a
+            href={kakaoChatUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#FEE500] px-8 text-base font-black text-[#191919] transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
+          >
+            카카오톡 문의하기
+          </a>
+        </Reveal>
       </SectionShell>
 
       <SectionShell id="apply" className="min-h-[70svh] content-center">
