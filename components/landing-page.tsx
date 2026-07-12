@@ -471,26 +471,6 @@ export default function LandingPage() {
         </div>
       </SectionShell>
 
-      <SectionShell className="border-y border-line">
-        <Reveal className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
-          <div>
-            <SectionLabel>Contact</SectionLabel>
-            <h2 className="max-w-[720px] text-[clamp(2rem,4.8vw,4.8rem)] font-black leading-[1.1] [word-break:keep-all]">
-              아직 고민 중이라면,
-              <span className="block text-smoke">카카오톡으로 먼저 물어보세요.</span>
-            </h2>
-          </div>
-          <a
-            href={kakaoChatUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#FEE500] px-8 text-base font-black text-[#191919] transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
-          >
-            카카오톡 문의하기
-          </a>
-        </Reveal>
-      </SectionShell>
-
       <SectionShell id="apply" className="min-h-[70svh] content-center">
         <Reveal className="mx-auto max-w-[1120px] text-center">
           <p className="mb-7 flex items-center justify-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-signal">
@@ -508,6 +488,26 @@ export default function LandingPage() {
           <div className="mt-10 flex justify-center">
             <CTA>지원하기</CTA>
           </div>
+        </Reveal>
+      </SectionShell>
+
+      <SectionShell className="border-y border-line">
+        <Reveal className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <SectionLabel>Contact</SectionLabel>
+            <h2 className="max-w-[720px] text-[clamp(2rem,4.8vw,4.8rem)] font-black leading-[1.1] [word-break:keep-all]">
+              아직 고민 중이라면,
+              <span className="block text-smoke">카카오톡으로 먼저 물어보세요.</span>
+            </h2>
+          </div>
+          <a
+            href={kakaoChatUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#FEE500] px-8 text-base font-black text-[#191919] transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
+          >
+            카카오톡 문의하기
+          </a>
         </Reveal>
       </SectionShell>
 
