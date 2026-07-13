@@ -1,5 +1,8 @@
 import { ArrowRight, Bell, CalendarDays, CheckCircle2, Clock3, ExternalLink, FileText, Link2, MessageSquareText, UploadCloud, Video } from "lucide-react";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { curriculumWeeks } from "@/lib/content";
+import { findActiveStudentByEmail } from "@/lib/students";
 
 const assignments = [
   {
@@ -51,7 +54,23 @@ function StatusPill({ status, tone }: { status: string; tone: string }) {
   return <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-black ${className}`}>{status}</span>;
 }
 
-export default function PortalPage() {
+export default async function PortalPage() {
+  const cookieStore = await cookies();
+  const email = cookieStore.get("sea_student_email")?.value;
+  const student = email ? await findActiveStudentByEmail(email) : null;
+
+  if (!student) {
+    redirect("/login");
+  }
+
+  async function logout() {
+    "use server";
+
+    const nextCookies = await cookies();
+    nextCookies.delete("sea_student_email");
+    redirect("/login");
+  }
+
   return (
     <main className="min-h-screen bg-ink text-bone">
       <div className="noise" aria-hidden="true" />
@@ -72,12 +91,13 @@ export default function PortalPage() {
               공지
             </a>
           </div>
-          <a
-            href="/"
-            className="rounded-full border border-line px-4 py-2 text-xs font-bold transition hover:border-bone hover:bg-bone hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
-          >
-            랜딩으로
-          </a>
+          <form action={logout}>
+            <button
+              className="rounded-full border border-line px-4 py-2 text-xs font-bold transition hover:border-bone hover:bg-bone hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
+            >
+              로그아웃
+            </button>
+          </form>
         </nav>
       </header>
 
@@ -92,7 +112,7 @@ export default function PortalPage() {
             <span className="block text-smoke">이번 주 과제만 빠르게.</span>
           </h1>
           <p className="mt-6 max-w-read text-base font-medium leading-7 text-smoke sm:text-lg">
-            Zoom으로 진행되는 수업에 맞춰 진도율 대신 일정, 공지, 제출 상태를 한 화면에서 관리합니다.
+            {student.name}님, Zoom으로 진행되는 수업에 맞춰 진도율 대신 일정, 공지, 제출 상태를 한 화면에서 관리합니다.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
