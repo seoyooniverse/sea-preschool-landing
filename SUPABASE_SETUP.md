@@ -23,6 +23,18 @@ create table if not exists public.applications (
 );
 
 alter table public.applications enable row level security;
+
+create table if not exists public.students (
+  id uuid primary key,
+  created_at timestamptz not null default now(),
+  name text not null,
+  email text not null unique,
+  role text not null default 'student',
+  status text not null default 'active',
+  source_application_id uuid references public.applications(id)
+);
+
+alter table public.students enable row level security;
 ```
 
 ## 2. Environment variables
@@ -51,3 +63,5 @@ NEXT_PUBLIC_SITE_URL=https://배포주소
 - Landing: `/`
 - Apply: `/apply`
 - Admin: `/admin?key=ADMIN_KEY값`
+- Login: `/login`
+- Student portal: `/portal`
