@@ -3,7 +3,7 @@ import { enrollStudentFromApplication, normalizeEmail, readStudents } from "@/li
 import { redirect } from "next/navigation";
 
 type AdminPageProps = {
-  searchParams: Promise<{ key?: string }>;
+  searchParams: Promise<{ error?: string; key?: string }>;
 };
 
 async function approveStudent(formData: FormData) {
@@ -21,7 +21,12 @@ async function approveStudent(formData: FormData) {
   const application = applications.find((item) => item.id === applicationId);
 
   if (application) {
-    await enrollStudentFromApplication(application);
+    try {
+      await enrollStudentFromApplication(application);
+    } catch (error) {
+      console.error(error);
+      redirect(`/admin?key=${encodeURIComponent(key)}&error=approval`);
+    }
   }
 
   redirect(`/admin?key=${encodeURIComponent(key)}`);
@@ -58,6 +63,11 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
           </section>
         ) : (
           <section className="mt-10">
+            {params.error === "approval" ? (
+              <div className="mb-6 border border-signal/40 bg-signal/10 p-4 text-sm font-bold leading-6 text-smoke">
+                승인 저장에 실패했습니다. Supabase에 `students` 테이블이 만들어져 있는지 확인해주세요.
+              </div>
+            ) : null}
             <div className="mb-6 flex flex-col gap-2 text-sm font-bold text-muted sm:flex-row sm:items-center sm:justify-between">
               <p>총 {applications.length}건 접수</p>
               <p>포털 로그인 가능 수강생 {students.length}명</p>
