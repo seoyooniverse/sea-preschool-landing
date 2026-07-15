@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { saveApplication, type Application } from "@/lib/applications";
 import { notifyNewApplication } from "@/lib/notifications";
+import { programInfo } from "@/lib/program";
 
 export const runtime = "nodejs";
 
@@ -22,6 +23,7 @@ export async function POST(request: Request) {
   const application: Application = {
     id: crypto.randomUUID(),
     createdAt: new Date().toISOString(),
+    cohort: programInfo.cohort,
     name: String(body.name).trim(),
     phone: String(body.phone).trim(),
     email: String(body.email).trim(),

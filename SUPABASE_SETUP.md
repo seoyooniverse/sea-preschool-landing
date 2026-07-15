@@ -8,6 +8,7 @@ Supabase Dashboard > SQL Editor > New query에서 아래 SQL을 실행합니다.
 create table if not exists public.applications (
   id uuid primary key,
   created_at timestamptz not null default now(),
+  cohort text,
   name text not null,
   phone text not null,
   email text not null,
@@ -35,6 +36,13 @@ create table if not exists public.students (
 );
 
 alter table public.students enable row level security;
+```
+
+이미 `applications` 테이블을 만든 뒤라면, 아래 SQL만 한 번 더 실행하면 됩니다.
+
+```sql
+alter table public.applications
+add column if not exists cohort text;
 ```
 
 ## 2. Environment variables

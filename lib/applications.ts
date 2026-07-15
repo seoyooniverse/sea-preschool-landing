@@ -5,6 +5,7 @@ export { bankInfo } from "@/lib/program";
 export type Application = {
   id: string;
   createdAt: string;
+  cohort: string;
   name: string;
   phone: string;
   email: string;
@@ -25,6 +26,7 @@ const dataFile = path.join(dataDir, "applications.json");
 type SupabaseApplicationRow = {
   id: string;
   created_at: string;
+  cohort: string | null;
   name: string;
   phone: string;
   email: string;
@@ -71,6 +73,7 @@ function toRow(application: Application): SupabaseApplicationRow {
   return {
     id: application.id,
     created_at: application.createdAt,
+    cohort: application.cohort,
     name: application.name,
     phone: application.phone,
     email: application.email,
@@ -90,6 +93,7 @@ function fromRow(row: SupabaseApplicationRow): Application {
   return {
     id: row.id,
     createdAt: row.created_at,
+    cohort: row.cohort ?? "기수 미지정",
     name: row.name,
     phone: row.phone,
     email: row.email,
