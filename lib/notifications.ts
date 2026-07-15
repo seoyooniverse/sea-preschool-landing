@@ -50,7 +50,7 @@ function getSiteUrl() {
 }
 
 function getAdminUrl() {
-  const key = process.env.ADMIN_KEY;
+  const key = process.env.ADMIN_KEY?.trim();
   const adminPath = key ? `/admin?key=${encodeURIComponent(key)}` : "/admin";
 
   return `${getSiteUrl()}${adminPath}`;

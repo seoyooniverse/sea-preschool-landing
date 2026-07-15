@@ -9,9 +9,9 @@ type AdminPageProps = {
 async function approveStudent(formData: FormData) {
   "use server";
 
-  const key = String(formData.get("key") ?? "");
+  const key = String(formData.get("key") ?? "").trim();
   const applicationId = String(formData.get("applicationId") ?? "");
-  const adminKey = process.env.ADMIN_KEY ?? "sea2026";
+  const adminKey = (process.env.ADMIN_KEY ?? "sea2026").trim();
 
   if (key !== adminKey || !applicationId) {
     redirect("/admin");
@@ -29,8 +29,9 @@ async function approveStudent(formData: FormData) {
 
 export default async function AdminPage({ searchParams }: AdminPageProps) {
   const params = await searchParams;
-  const adminKey = process.env.ADMIN_KEY ?? "sea2026";
-  const authorized = params.key === adminKey;
+  const adminKey = (process.env.ADMIN_KEY ?? "sea2026").trim();
+  const enteredKey = String(params.key ?? "").trim();
+  const authorized = enteredKey === adminKey;
   const applications = authorized ? await readApplications() : [];
   const students = authorized ? await readStudents() : [];
   const activeStudentEmails = new Set(students.filter((student) => student.status === "active").map((student) => normalizeEmail(student.email)));
@@ -94,7 +95,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                           </div>
                         </dl>
                         <form action={approveStudent} className="mt-5">
-                          <input type="hidden" name="key" value={params.key ?? ""} />
+                          <input type="hidden" name="key" value={enteredKey} />
                           <input type="hidden" name="applicationId" value={item.id} />
                           <button
                             disabled={approved}
