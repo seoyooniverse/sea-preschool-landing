@@ -207,8 +207,8 @@ export const faqs = [
 ];
 
 export const academicSchedule = [
-  { label: "접수", value: "2026.07.15(수) - 08.02(일)" },
-  { label: "등록", value: "2026.07.15(수) - 08.02(일)" },
+  { label: "접수", value: "2026.07.16(목) - 08.02(일)" },
+  { label: "등록", value: "2026.07.16(목) - 08.02(일)" },
   { label: "개강", value: "2026.08.03(월) 온라인 개강" },
   { label: "정규 수업", value: "매주 월요일 20:00-22:00" },
   { label: "휴강", value: "2026.10.05(월)" },

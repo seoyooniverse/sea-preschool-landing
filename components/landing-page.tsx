@@ -397,7 +397,7 @@ export default function LandingPage() {
           <Reveal>
             <SectionLabel>Schedule</SectionLabel>
             <h2 className="text-[clamp(2rem,4.8vw,4.8rem)] font-black leading-[1.1] [word-break:keep-all]">
-              2026년 1기 학사일정
+              2026년 8월 개강반 학사일정
             </h2>
           </Reveal>
           <div>
