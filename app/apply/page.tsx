@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Send } from "lucide-react";
-import { bankInfo } from "@/lib/program";
+import { bankInfo, programInfo } from "@/lib/program";
 
 type SubmitState = "idle" | "submitting" | "error";
 
@@ -59,7 +59,7 @@ export default function ApplyPage() {
             <p className="mb-5 text-xs font-black uppercase tracking-[0.18em] text-signal">Application</p>
             <h1 className="text-[clamp(2.4rem,7vw,6.2rem)] font-black leading-[1.08] [word-break:keep-all]">
               과정 신청서
-              <span className="block text-smoke">MJU x SEA</span>
+              <span className="block text-smoke">{programInfo.cohort}</span>
             </h1>
             <p className="mt-6 max-w-[520px] text-base font-medium leading-7 text-muted">
               기본 정보를 남겨주시면 운영팀이 신청 내용을 확인합니다. 신청 시 입금액 확인 후 최종 등록이 완료됩니다.

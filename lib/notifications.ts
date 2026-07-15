@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import type { Application } from "@/lib/applications";
-import { bankInfo } from "@/lib/program";
+import { bankInfo, programInfo } from "@/lib/program";
 
 const SOLAPI_ENDPOINT = "https://api.solapi.com/messages/v4/send";
 
@@ -86,7 +86,7 @@ export async function notifyNewApplication(application: Application) {
   }
 
   const applicantText = [
-    `${application.name}님, SEA 프리스쿨 과정 신청이 접수되었습니다.`,
+    `${application.name}님, SEA 프리스쿨 ${programInfo.cohort} 신청이 접수되었습니다.`,
     `${bankInfo.amount}`,
     `${bankInfo.bank} ${bankInfo.account}`,
     `예금주: ${bankInfo.holder}`,
@@ -96,7 +96,7 @@ export async function notifyNewApplication(application: Application) {
   ].join("\n");
 
   const adminText = [
-    "[SEA 프리스쿨 신청 접수]",
+    `[SEA 프리스쿨 신청 접수] ${programInfo.cohort}`,
     `이름: ${application.name}`,
     `연락처: ${application.phone}`,
     `관심 직무: ${application.interest}`,

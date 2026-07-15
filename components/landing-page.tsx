@@ -512,8 +512,13 @@ export default function LandingPage() {
       </SectionShell>
 
       <footer className="mx-auto flex max-w-page flex-col gap-4 border-t border-line px-[var(--page-x)] py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
-        <p className="font-bold text-bone">MJU x SEA Entertainment Portfolio Program</p>
-        <p>From consumer to creator.</p>
+        <div>
+          <p className="font-bold text-bone">MJU x SEA Entertainment Portfolio Program</p>
+          <p className="mt-1">From consumer to creator.</p>
+        </div>
+        <a href="/archive/2026-july" className="font-bold transition hover:text-bone">
+          2026년 7월 1기 아카이브
+        </a>
       </footer>
     </main>
   );
