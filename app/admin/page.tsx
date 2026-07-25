@@ -37,8 +37,20 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   const adminKey = (process.env.ADMIN_KEY ?? "sea2026").trim();
   const enteredKey = String(params.key ?? "").trim();
   const authorized = enteredKey === adminKey;
-  const applications = authorized ? await readApplications() : [];
-  const students = authorized ? await readStudents() : [];
+  let dataError = false;
+  let applications: Awaited<ReturnType<typeof readApplications>> = [];
+  let students: Awaited<ReturnType<typeof readStudents>> = [];
+
+  if (authorized) {
+    try {
+      applications = await readApplications();
+      students = await readStudents();
+    } catch (error) {
+      console.error(error);
+      dataError = true;
+    }
+  }
+
   const activeStudentEmails = new Set(students.filter((student) => student.status === "active").map((student) => normalizeEmail(student.email)));
 
   return (
@@ -63,6 +75,11 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
           </section>
         ) : (
           <section className="mt-10">
+            {dataError ? (
+              <div className="mb-6 border border-signal/40 bg-signal/10 p-4 text-sm font-bold leading-6 text-smoke">
+                Supabase 연결을 확인해야 합니다. 환경변수와 `applications` 테이블 생성 여부를 확인해주세요.
+              </div>
+            ) : null}
             {params.error === "approval" ? (
               <div className="mb-6 border border-signal/40 bg-signal/10 p-4 text-sm font-bold leading-6 text-smoke">
                 승인 저장에 실패했습니다. Supabase에 `students` 테이블이 만들어져 있는지 확인해주세요.
