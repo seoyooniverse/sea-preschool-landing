@@ -22,23 +22,31 @@ export default function ApplyPage() {
     const data = new FormData(form);
     const payload = Object.fromEntries(data.entries());
 
-    const response = await fetch("/api/applications", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...payload,
-        agreed: data.get("agreed") === "on",
-      }),
-    });
+    try {
+      const response = await fetch("/api/applications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...payload,
+          agreed: data.get("agreed") === "on",
+        }),
+      });
 
-    const result = await response.json();
-    if (!response.ok) {
+      const result = await response.json().catch(() => ({
+        message: "접수 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
+      }));
+
+      if (!response.ok) {
+        setState("error");
+        setMessage(result.message ?? "접수 중 문제가 발생했습니다.");
+        return;
+      }
+
+      router.push(`/apply/complete?id=${result.id}`);
+    } catch {
       setState("error");
-      setMessage(result.message ?? "접수 중 문제가 발생했습니다.");
-      return;
+      setMessage("네트워크 연결이 불안정합니다. 잠시 후 다시 시도해주세요.");
     }
-
-    router.push(`/apply/complete?id=${result.id}`);
   }
 
   const inputClass =

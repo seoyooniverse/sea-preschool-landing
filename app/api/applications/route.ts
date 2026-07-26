@@ -38,7 +38,21 @@ export async function POST(request: Request) {
     agreed: Boolean(body.agreed),
   };
 
-  await saveApplication(application);
+  try {
+    await saveApplication(application);
+  } catch (error) {
+    console.error(error);
+    const detail = error instanceof Error ? error.message : "Unknown database error";
+
+    return NextResponse.json(
+      {
+        message: "접수 저장 중 문제가 발생했습니다. 운영팀에 문의해주세요.",
+        detail,
+      },
+      { status: 500 },
+    );
+  }
+
   try {
     await notifyNewApplication(application);
   } catch (error) {
