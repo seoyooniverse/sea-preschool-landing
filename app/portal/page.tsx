@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { curriculumWeeks, julyCurriculumWeeks } from "@/lib/content";
 import { isAugustCohort, normalizeCohort } from "@/lib/cohorts";
 import { findActiveStudentByEmail } from "@/lib/students";
+import { SubmissionForm } from "@/components/submission-form";
 
 const quickActions = [
   { label: "Zoom 입장", icon: Video, href: "#" },
@@ -261,7 +262,7 @@ export default async function PortalPage() {
 
         <div className="divide-y divide-line border-y border-line">
           {assignments.map((assignment) => (
-            <article key={assignment.title} className="grid gap-5 py-6 md:grid-cols-[1fr_140px] md:items-center">
+            <article key={assignment.title} className="grid gap-5 py-6 md:grid-cols-[minmax(0,1fr)_280px] md:items-start">
               <div>
                 <div className="mb-4 flex flex-wrap items-center gap-3">
                   <FileText aria-hidden="true" className="h-5 w-5 text-signal" />
@@ -271,13 +272,11 @@ export default async function PortalPage() {
                 <p className="mt-3 max-w-read text-sm font-medium leading-6 text-muted">{assignment.body}</p>
                 <p className="mt-4 text-xs font-bold text-smoke">마감 {assignment.due}</p>
               </div>
-              <a
-                href="#"
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-line px-5 text-sm font-black transition hover:border-bone hover:bg-bone hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
-              >
-                제출하기
-                <UploadCloud aria-hidden="true" className="h-4 w-4" />
-              </a>
+              {assignment.status === "완료" ? (
+                <p className="rounded-full border border-line px-4 py-3 text-center text-xs font-black text-muted">제출 완료 처리됨</p>
+              ) : (
+                <SubmissionForm assignmentTitle={assignment.title} />
+              )}
             </article>
           ))}
         </div>

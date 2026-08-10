@@ -37,6 +37,23 @@ create table if not exists public.students (
 );
 
 alter table public.students enable row level security;
+
+create table if not exists public.submissions (
+  id uuid primary key,
+  created_at timestamptz not null default now(),
+  student_email text not null,
+  student_name text not null,
+  cohort text not null,
+  assignment_title text not null,
+  file_path text not null,
+  original_filename text not null,
+  file_size bigint,
+  file_type text,
+  comment text,
+  status text not null default 'submitted'
+);
+
+alter table public.submissions enable row level security;
 ```
 
 이미 `applications` 테이블을 만든 뒤라면, 아래 SQL만 한 번 더 실행하면 됩니다.
@@ -84,6 +101,39 @@ where cohort is null or cohort = '' or cohort = '기수 미지정';
 
 ## 2. Environment variables
 
+## 2. Storage bucket
+
+Supabase Dashboard > Storage에서 아래 bucket을 생성합니다.
+
+```txt
+assignment-files
+```
+
+Bucket은 private으로 두는 것을 권장합니다. 이 프로젝트는 관리자 다운로드 시 60초짜리 임시 다운로드 링크를 만들어 사용합니다.
+
+이미 테이블을 만든 뒤 파일 제출 기능만 추가한다면 아래 SQL을 실행합니다.
+
+```sql
+create table if not exists public.submissions (
+  id uuid primary key,
+  created_at timestamptz not null default now(),
+  student_email text not null,
+  student_name text not null,
+  cohort text not null,
+  assignment_title text not null,
+  file_path text not null,
+  original_filename text not null,
+  file_size bigint,
+  file_type text,
+  comment text,
+  status text not null default 'submitted'
+);
+
+alter table public.submissions enable row level security;
+```
+
+## 3. Environment variables
+
 Vercel > Project > Settings > Environment Variables에 아래 값을 추가합니다.
 
 ```txt
@@ -103,7 +153,7 @@ NEXT_PUBLIC_SITE_URL=https://배포주소
 
 `SOLAPI_ADMIN_TO`를 비워두면 발신번호와 같은 번호로 운영자 알림이 갑니다. 관리자 문자에는 `/admin?key=...` 지원서 확인 링크가 포함됩니다.
 
-## 3. Check pages
+## 4. Check pages
 
 - Landing: `/`
 - Apply: `/apply`

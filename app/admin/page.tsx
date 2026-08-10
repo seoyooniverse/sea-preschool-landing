@@ -1,6 +1,7 @@
 import { readApplications } from "@/lib/applications";
 import { normalizeCohort } from "@/lib/cohorts";
 import { enrollStudentFromApplication, normalizeEmail, readStudents } from "@/lib/students";
+import { readSubmissions } from "@/lib/submissions";
 import { redirect } from "next/navigation";
 
 type AdminPageProps = {
@@ -41,11 +42,13 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   let dataError = false;
   let applications: Awaited<ReturnType<typeof readApplications>> = [];
   let students: Awaited<ReturnType<typeof readStudents>> = [];
+  let submissions: Awaited<ReturnType<typeof readSubmissions>> = [];
 
   if (authorized) {
     try {
       applications = await readApplications();
       students = await readStudents();
+      submissions = await readSubmissions();
     } catch (error) {
       console.error(error);
       dataError = true;
@@ -90,6 +93,37 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               <p>총 {applications.length}건 접수</p>
               <p>포털 로그인 가능 수강생 {students.length}명</p>
             </div>
+            <section className="mb-12">
+              <h2 className="text-2xl font-black">과제 제출물</h2>
+              <div className="mt-5 divide-y divide-line border-y border-line">
+                {submissions.length === 0 ? (
+                  <p className="py-6 text-sm font-medium text-muted">아직 제출된 과제가 없습니다.</p>
+                ) : (
+                  submissions.map((submission) => (
+                    <article key={submission.id} className="grid gap-4 py-5 lg:grid-cols-[0.8fr_1.2fr_150px] lg:items-center">
+                      <div>
+                        <p className="text-xs font-black text-signal">{submission.cohort}</p>
+                        <h3 className="mt-2 text-xl font-black leading-tight [word-break:keep-all]">{submission.assignmentTitle}</h3>
+                        <p className="mt-2 text-xs font-semibold text-muted">{new Date(submission.createdAt).toLocaleString("ko-KR")}</p>
+                      </div>
+                      <div className="text-sm font-medium leading-6 text-smoke">
+                        <p>
+                          <span className="font-black text-bone">{submission.studentName}</span> · {submission.studentEmail}
+                        </p>
+                        <p className="text-muted">{submission.originalFilename}</p>
+                        {submission.comment ? <p className="mt-2">{submission.comment}</p> : null}
+                      </div>
+                      <a
+                        href={`/api/submissions/${submission.id}/download?key=${encodeURIComponent(enteredKey)}`}
+                        className="inline-flex min-h-11 items-center justify-center rounded-full border border-line px-5 text-sm font-black transition hover:border-bone hover:bg-bone hover:text-ink"
+                      >
+                        다운로드
+                      </a>
+                    </article>
+                  ))
+                )}
+              </div>
+            </section>
             <div className="divide-y divide-line border-y border-line">
               {applications.length === 0 ? (
                 <p className="py-8 text-muted">아직 접수된 지원서가 없습니다.</p>
