@@ -1,4 +1,5 @@
 import { readApplications } from "@/lib/applications";
+import { normalizeCohort } from "@/lib/cohorts";
 import { enrollStudentFromApplication, normalizeEmail, readStudents } from "@/lib/students";
 import { redirect } from "next/navigation";
 
@@ -105,7 +106,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                             {approved ? "수강생 승인됨" : "승인 대기"}
                           </span>
                         </div>
-                        <p className="mt-2 text-sm font-black text-signal">{item.cohort || "기수 미지정"}</p>
+                        <p className="mt-2 text-sm font-black text-signal">{normalizeCohort(item.cohort)}</p>
                         <p className="mt-1 text-xs font-semibold text-muted">{new Date(item.createdAt).toLocaleString("ko-KR")}</p>
                         <dl className="mt-5 grid gap-2 text-sm text-smoke">
                           <div>

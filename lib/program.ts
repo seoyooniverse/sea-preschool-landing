@@ -1,3 +1,5 @@
+import { AUGUST_COHORT } from "@/lib/cohorts";
+
 export const bankInfo = {
   bank: "카카오뱅크",
   account: "3333-33-6470894",
@@ -6,5 +8,5 @@ export const bankInfo = {
 };
 
 export const programInfo = {
-  cohort: "2026년 8월 개강반",
+  cohort: AUGUST_COHORT,
 };

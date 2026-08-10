@@ -1,5 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
+import { normalizeCohort } from "@/lib/cohorts";
 export { bankInfo } from "@/lib/program";
 
 export type Application = {
@@ -93,7 +94,7 @@ function fromRow(row: SupabaseApplicationRow): Application {
   return {
     id: row.id,
     createdAt: row.created_at,
-    cohort: row.cohort ?? "기수 미지정",
+    cohort: normalizeCohort(row.cohort),
     name: row.name,
     phone: row.phone,
     email: row.email,

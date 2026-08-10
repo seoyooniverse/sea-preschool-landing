@@ -1,7 +1,8 @@
 import { ArrowRight, Bell, CalendarDays, CheckCircle2, Clock3, ExternalLink, FileText, Link2, MessageSquareText, UploadCloud, Video } from "lucide-react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { curriculumWeeks } from "@/lib/content";
+import { curriculumWeeks, julyCurriculumWeeks } from "@/lib/content";
+import { isAugustCohort, normalizeCohort } from "@/lib/cohorts";
 import { findActiveStudentByEmail } from "@/lib/students";
 
 const assignments = [
@@ -40,9 +41,6 @@ const quickActions = [
   { label: "공지 확인", icon: Bell, href: "#notices" },
 ];
 
-const nextClass = curriculumWeeks[0];
-const upcomingWeeks = curriculumWeeks.slice(0, 4);
-
 function StatusPill({ status, tone }: { status: string; tone: string }) {
   const className =
     tone === "complete"
@@ -62,6 +60,12 @@ export default async function PortalPage() {
   if (!student) {
     redirect("/login");
   }
+
+  const cohort = normalizeCohort(student.cohort);
+  const weeks = isAugustCohort(cohort) ? curriculumWeeks : julyCurriculumWeeks;
+  const nextClass = weeks[0];
+  const upcomingWeeks = weeks.slice(0, 4);
+  const regularDay = isAugustCohort(cohort) ? "매주 월요일" : "매주 화요일";
 
   async function logout() {
     "use server";
@@ -112,7 +116,7 @@ export default async function PortalPage() {
             <span className="block text-smoke">이번 주 과제만 빠르게.</span>
           </h1>
           <p className="mt-6 max-w-read text-base font-medium leading-7 text-smoke sm:text-lg">
-            {student.name}님, Zoom으로 진행되는 수업에 맞춰 진도율 대신 일정, 공지, 제출 상태를 한 화면에서 관리합니다.
+            {student.name}님은 {cohort}입니다. Zoom으로 진행되는 {regularDay} 수업 일정, 공지, 제출 상태를 한 화면에서 관리합니다.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">

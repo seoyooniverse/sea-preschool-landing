@@ -32,6 +32,7 @@ create table if not exists public.students (
   email text not null unique,
   role text not null default 'student',
   status text not null default 'active',
+  cohort text not null default '2026년 7월 개강반',
   source_application_id uuid references public.applications(id)
 );
 
@@ -55,10 +56,30 @@ create table if not exists public.students (
   email text not null unique,
   role text not null default 'student',
   status text not null default 'active',
+  cohort text not null default '2026년 7월 개강반',
   source_application_id uuid references public.applications(id)
 );
 
 alter table public.students enable row level security;
+```
+
+이미 `students` 테이블을 만든 뒤라면, 아래 SQL만 한 번 더 실행하면 됩니다. 기존 승인 학생은 연결된 지원서가 8월 개강반이면 8월반으로, 그 외 기수 미지정은 7월반으로 처리됩니다.
+
+```sql
+alter table public.students
+add column if not exists cohort text not null default '2026년 7월 개강반';
+
+update public.students
+set cohort = case
+  when applications.cohort ilike '%8월%' then '2026년 8월 개강반'
+  else '2026년 7월 개강반'
+end
+from public.applications
+where students.source_application_id = applications.id;
+
+update public.students
+set cohort = '2026년 7월 개강반'
+where cohort is null or cohort = '' or cohort = '기수 미지정';
 ```
 
 ## 2. Environment variables

@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import type { Application } from "@/lib/applications";
+import { normalizeCohort } from "@/lib/cohorts";
 
 export type Student = {
   id: string;
@@ -9,6 +10,7 @@ export type Student = {
   email: string;
   role: "student" | "admin";
   status: "active" | "inactive";
+  cohort: string;
   sourceApplicationId?: string;
 };
 
@@ -22,6 +24,7 @@ type SupabaseStudentRow = {
   email: string;
   role: "student" | "admin";
   status: "active" | "inactive";
+  cohort: string | null;
   source_application_id: string | null;
 };
 
@@ -65,6 +68,7 @@ function toRow(student: Student): SupabaseStudentRow {
     email: normalizeEmail(student.email),
     role: student.role,
     status: student.status,
+    cohort: normalizeCohort(student.cohort),
     source_application_id: student.sourceApplicationId ?? null,
   };
 }
@@ -77,6 +81,7 @@ function fromRow(row: SupabaseStudentRow): Student {
     email: normalizeEmail(row.email),
     role: row.role,
     status: row.status,
+    cohort: normalizeCohort(row.cohort),
     sourceApplicationId: row.source_application_id ?? undefined,
   };
 }
@@ -176,6 +181,7 @@ export async function enrollStudentFromApplication(application: Application) {
     email: normalized,
     role: "student",
     status: "active",
+    cohort: normalizeCohort(application.cohort),
     sourceApplicationId: application.id,
   };
 
