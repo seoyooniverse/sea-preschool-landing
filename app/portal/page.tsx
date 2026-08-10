@@ -5,41 +5,97 @@ import { curriculumWeeks, julyCurriculumWeeks } from "@/lib/content";
 import { isAugustCohort, normalizeCohort } from "@/lib/cohorts";
 import { findActiveStudentByEmail } from "@/lib/students";
 
-const assignments = [
-  {
-    title: "시장 분석 리포트 초안",
-    due: "2026.07.20 23:59",
-    status: "제출 전",
-    tone: "signal",
-    body: "선택한 아티스트와 경쟁 레퍼런스 3팀의 포지션을 비교해 주세요.",
-  },
-  {
-    title: "브랜드 코어 시트",
-    due: "2026.07.27 23:59",
-    status: "예정",
-    tone: "muted",
-    body: "타깃 팬덤, 콘셉트 키워드, 차별화 포인트를 한 페이지로 정리합니다.",
-  },
-  {
-    title: "수강 오리엔테이션 확인",
-    due: "2026.07.14 19:30",
-    status: "완료",
-    tone: "complete",
-    body: "Zoom 접속명과 과제 제출 규칙 확인을 마쳤습니다.",
-  },
-];
-
-const notices = [
-  "온라인 수업은 매주 화요일 20:00에 같은 Zoom 링크로 입장합니다.",
-  "과제는 마감 전까지 파일 또는 공유 링크로 제출할 수 있습니다.",
-  "오프라인 실습 장소와 준비물은 해당 주차 3일 전 별도 공지됩니다.",
-];
-
 const quickActions = [
   { label: "Zoom 입장", icon: Video, href: "#" },
   { label: "과제 제출", icon: UploadCloud, href: "#assignments" },
   { label: "공지 확인", icon: Bell, href: "#notices" },
 ];
+
+type CurriculumWeek = {
+  week: string;
+  date: string;
+  time: string;
+  mode: string;
+  title: string;
+  detail?: string;
+};
+
+function dateKeyFromKoreanDate(value: string) {
+  const match = value.match(/(\d{4})\.(\d{2})\.(\d{2})/);
+  if (!match) {
+    return 0;
+  }
+
+  return Number(`${match[1]}${match[2]}${match[3]}`);
+}
+
+function todayKeyInSeoul() {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Seoul",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  return Number(formatter.format(new Date()).replaceAll("-", ""));
+}
+
+function getUpcomingWeeks(weeks: CurriculumWeek[]) {
+  const todayKey = todayKeyInSeoul();
+  const nextIndex = weeks.findIndex((week) => dateKeyFromKoreanDate(week.date) >= todayKey);
+  const startIndex = nextIndex >= 0 ? nextIndex : Math.max(weeks.length - 1, 0);
+
+  return weeks.slice(startIndex, startIndex + 4);
+}
+
+function getAssignments(augustCohort: boolean) {
+  return augustCohort
+    ? [
+        {
+          title: "시장 분석 리포트 초안",
+          due: "2026.08.16 23:59",
+          status: "제출 전",
+          tone: "signal",
+          body: "선택한 아티스트와 경쟁 레퍼런스 3팀의 포지션을 비교해 주세요.",
+        },
+        {
+          title: "브랜드 코어 시트",
+          due: "2026.08.23 23:59",
+          status: "예정",
+          tone: "muted",
+          body: "타깃 팬덤, 콘셉트 키워드, 차별화 포인트를 한 페이지로 정리합니다.",
+        },
+        {
+          title: "수강 오리엔테이션 확인",
+          due: "2026.08.03 19:30",
+          status: "완료",
+          tone: "complete",
+          body: "Zoom 접속명과 과제 제출 규칙 확인을 마쳤습니다.",
+        },
+      ]
+    : [
+        {
+          title: "장르와 악곡의 언어 과제",
+          due: "2026.08.17 23:59",
+          status: "제출 전",
+          tone: "signal",
+          body: "레퍼런스 곡 3개를 고르고, 사운드 방향을 기획 언어로 정리해 주세요.",
+        },
+        {
+          title: "프리프로덕션 워크숍 준비",
+          due: "2026.08.18 수업 전",
+          status: "예정",
+          tone: "muted",
+          body: "선택한 아티스트의 콘셉트, 타깃, 핵심 무드를 한 페이지로 가져옵니다.",
+        },
+        {
+          title: "브랜드 코어 시트",
+          due: "2026.07.27 23:59",
+          status: "완료",
+          tone: "complete",
+          body: "타깃 팬덤, 콘셉트 키워드, 차별화 포인트 정리를 마쳤습니다.",
+        },
+      ];
+}
 
 function StatusPill({ status, tone }: { status: string; tone: string }) {
   const className =
@@ -62,10 +118,17 @@ export default async function PortalPage() {
   }
 
   const cohort = normalizeCohort(student.cohort);
-  const weeks = isAugustCohort(cohort) ? curriculumWeeks : julyCurriculumWeeks;
-  const nextClass = weeks[0];
-  const upcomingWeeks = weeks.slice(0, 4);
-  const regularDay = isAugustCohort(cohort) ? "매주 월요일" : "매주 화요일";
+  const augustCohort = isAugustCohort(cohort);
+  const weeks = augustCohort ? curriculumWeeks : julyCurriculumWeeks;
+  const upcomingWeeks = getUpcomingWeeks(weeks);
+  const nextClass = upcomingWeeks[0] ?? weeks[weeks.length - 1];
+  const regularDay = augustCohort ? "매주 월요일" : "매주 화요일";
+  const assignments = getAssignments(augustCohort);
+  const notices = [
+    `온라인 수업은 ${regularDay} 20:00에 같은 Zoom 링크로 입장합니다.`,
+    "과제는 마감 전까지 파일 또는 공유 링크로 제출할 수 있습니다.",
+    "오프라인 실습 장소와 준비물은 해당 주차 3일 전 별도 공지됩니다.",
+  ];
 
   async function logout() {
     "use server";
