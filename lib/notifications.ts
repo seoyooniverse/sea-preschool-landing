@@ -87,7 +87,8 @@ export async function notifyNewApplication(application: Application) {
 
   const applicantText = [
     `${application.name}님, SEA 프리스쿨 ${programInfo.cohort} 신청이 접수되었습니다.`,
-    `${bankInfo.amount}`,
+    `개강일: ${programInfo.startsAt}`,
+    `등록 확인을 위해 ${bankInfo.amount} 입금 안내드립니다.`,
     `${bankInfo.bank} ${bankInfo.account}`,
     `예금주: ${bankInfo.holder}`,
     "입금자명은 신청자명과 동일하게 진행해주세요.",
@@ -96,9 +97,10 @@ export async function notifyNewApplication(application: Application) {
   ].join("\n");
 
   const adminText = [
-    `[SEA 프리스쿨 신청 접수] ${programInfo.cohort}`,
+    `[SEA 프리스쿨 신규 신청] ${programInfo.cohort}`,
     `이름: ${application.name}`,
     `연락처: ${application.phone}`,
+    `입금자명: ${application.depositor}`,
     `관심 직무: ${application.interest}`,
     `접수번호: ${application.id.slice(0, 8)}`,
     `지원서 확인: ${getAdminUrl()}`,
