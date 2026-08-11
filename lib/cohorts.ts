@@ -1,7 +1,8 @@
 export const JULY_COHORT = "2026년 7월 개강반";
 export const AUGUST_COHORT = "2026년 8월 개강반";
+export const SEPTEMBER_COHORT = "2026년 9월 3기";
 
-export const cohortOptions = [JULY_COHORT, AUGUST_COHORT];
+export const cohortOptions = [JULY_COHORT, AUGUST_COHORT, SEPTEMBER_COHORT];
 
 export function normalizeCohort(cohort?: string | null) {
   const value = String(cohort ?? "").trim();
@@ -14,6 +15,10 @@ export function normalizeCohort(cohort?: string | null) {
     return AUGUST_COHORT;
   }
 
+  if (value.includes("9월") || value.includes("3기")) {
+    return SEPTEMBER_COHORT;
+  }
+
   if (value.includes("7월")) {
     return JULY_COHORT;
   }
@@ -23,4 +28,8 @@ export function normalizeCohort(cohort?: string | null) {
 
 export function isAugustCohort(cohort?: string | null) {
   return normalizeCohort(cohort) === AUGUST_COHORT;
+}
+
+export function isSeptemberCohort(cohort?: string | null) {
+  return normalizeCohort(cohort) === SEPTEMBER_COHORT;
 }

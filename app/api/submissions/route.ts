@@ -32,7 +32,15 @@ function extensionOf(filename: string) {
 }
 
 function cohortSlug(cohort: string) {
-  return cohort.includes("8월") ? "2026-08" : "2026-07";
+  if (cohort.includes("9월") || cohort.includes("3기")) {
+    return "2026-09";
+  }
+
+  if (cohort.includes("8월")) {
+    return "2026-08";
+  }
+
+  return "2026-07";
 }
 
 function assignmentSlug(title: string) {

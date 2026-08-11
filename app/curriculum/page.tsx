@@ -3,8 +3,8 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { curriculumWeeks } from "@/lib/content";
 
 export const metadata = {
-  title: "16주 상세 커리큘럼 | MJU x SEA 엔터 취업 포트폴리오",
-  description: "시장 분석부터 최종 발표까지 이어지는 16주 프로젝트형 커리큘럼.",
+  title: "16강 상세 커리큘럼 | MJU x SEA 엔터 취업 포트폴리오",
+  description: "시장 분석부터 최종 발표까지 이어지는 16강 프로젝트형 커리큘럼.",
 };
 
 export default function CurriculumPage() {
@@ -17,7 +17,7 @@ export default function CurriculumPage() {
         </Link>
 
         <section className="py-12 lg:py-20">
-          <p className="mb-5 text-xs font-black uppercase tracking-[0.18em] text-signal">16 Week Curriculum</p>
+          <p className="mb-5 text-xs font-black uppercase tracking-[0.18em] text-signal">16 Class Curriculum</p>
           <h1 className="max-w-[900px] text-[clamp(2.5rem,7vw,6.8rem)] font-black leading-[1.08] [word-break:keep-all]">
             시장 분석부터 발표까지,
             <span className="block text-smoke">하나의 프로젝트로.</span>
@@ -36,6 +36,9 @@ export default function CurriculumPage() {
               </div>
               <div>
                 <h2 className="text-2xl font-black leading-tight [word-break:keep-all]">{item.title}</h2>
+                {"instructor" in item && item.instructor ? (
+                  <p className="mt-2 text-sm font-black text-signal">{item.instructor}</p>
+                ) : null}
                 <p className="mt-3 max-w-[760px] text-sm font-medium leading-6 text-muted sm:text-base sm:leading-7">{item.detail}</p>
               </div>
               <div className="grid content-start gap-2 text-sm font-bold">
@@ -49,7 +52,7 @@ export default function CurriculumPage() {
 
         <section className="flex flex-col gap-5 py-12 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-[520px] text-base font-bold leading-7 text-smoke">
-            16주 뒤, 관심은 보여줄 수 있는 결과물이 됩니다.
+            16강 뒤, 관심은 보여줄 수 있는 결과물이 됩니다.
           </p>
           <Link
             href="/apply"

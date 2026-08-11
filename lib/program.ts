@@ -1,4 +1,4 @@
-import { AUGUST_COHORT } from "@/lib/cohorts";
+import { SEPTEMBER_COHORT } from "@/lib/cohorts";
 
 export const bankInfo = {
   bank: "카카오뱅크",
@@ -8,5 +8,5 @@ export const bankInfo = {
 };
 
 export const programInfo = {
-  cohort: AUGUST_COHORT,
+  cohort: SEPTEMBER_COHORT,
 };

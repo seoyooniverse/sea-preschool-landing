@@ -1,8 +1,8 @@
 import { ArrowRight, Bell, CalendarDays, CheckCircle2, Clock3, ExternalLink, FileText, Link2, MessageSquareText, UploadCloud, Video } from "lucide-react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { curriculumWeeks, julyCurriculumWeeks } from "@/lib/content";
-import { isAugustCohort, normalizeCohort } from "@/lib/cohorts";
+import { augustCurriculumWeeks, curriculumWeeks, julyCurriculumWeeks } from "@/lib/content";
+import { isAugustCohort, isSeptemberCohort, normalizeCohort } from "@/lib/cohorts";
 import { findActiveStudentByEmail } from "@/lib/students";
 import { SubmissionForm } from "@/components/submission-form";
 
@@ -48,8 +48,34 @@ function getUpcomingWeeks(weeks: CurriculumWeek[]) {
   return weeks.slice(startIndex, startIndex + 4);
 }
 
-function getAssignments(augustCohort: boolean) {
-  return augustCohort
+function getAssignments(currentCohort: "july" | "august" | "september") {
+  if (currentCohort === "september") {
+    return [
+      {
+        title: "시장 분석 리포트 초안",
+        due: "2026.09.14 23:59",
+        status: "제출 전",
+        tone: "signal",
+        body: "선택한 아티스트와 경쟁 레퍼런스 3팀의 포지션을 비교해 주세요.",
+      },
+      {
+        title: "브랜드 코어 시트",
+        due: "2026.09.21 23:59",
+        status: "예정",
+        tone: "muted",
+        body: "타깃 팬덤, 콘셉트 키워드, 차별화 포인트를 한 페이지로 정리합니다.",
+      },
+      {
+        title: "수강 오리엔테이션 확인",
+        due: "2026.09.01 19:30",
+        status: "완료",
+        tone: "complete",
+        body: "Zoom 접속명과 과제 제출 규칙 확인을 마쳤습니다.",
+      },
+    ];
+  }
+
+  return currentCohort === "august"
     ? [
         {
           title: "시장 분석 리포트 초안",
@@ -119,12 +145,14 @@ export default async function PortalPage() {
   }
 
   const cohort = normalizeCohort(student.cohort);
+  const septemberCohort = isSeptemberCohort(cohort);
   const augustCohort = isAugustCohort(cohort);
-  const weeks = augustCohort ? curriculumWeeks : julyCurriculumWeeks;
+  const currentCohort = septemberCohort ? "september" : augustCohort ? "august" : "july";
+  const weeks = septemberCohort ? curriculumWeeks : augustCohort ? augustCurriculumWeeks : julyCurriculumWeeks;
   const upcomingWeeks = getUpcomingWeeks(weeks);
   const nextClass = upcomingWeeks[0] ?? weeks[weeks.length - 1];
   const regularDay = augustCohort ? "매주 월요일" : "매주 화요일";
-  const assignments = getAssignments(augustCohort);
+  const assignments = getAssignments(currentCohort);
   const notices = [
     `온라인 수업은 ${regularDay} 20:00에 같은 Zoom 링크로 입장합니다.`,
     "과제는 마감 전까지 파일 또는 공유 링크로 제출할 수 있습니다.",

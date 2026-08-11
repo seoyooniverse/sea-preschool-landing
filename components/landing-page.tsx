@@ -116,7 +116,7 @@ export default function LandingPage() {
             <h1 className="max-w-[760px] text-[clamp(2.25rem,6.2vw,5.8rem)] font-black leading-[1.14] [word-break:keep-all]">
               <span className="block">엔터 취업 포트폴리오.</span>
               <span className="block text-smoke">팬심을 스펙으로</span>
-              <span className="block text-smoke">바꾸는 16주.</span>
+              <span className="block text-smoke">바꾸는 16강.</span>
             </h1>
           </FadeIn>
 
@@ -397,7 +397,7 @@ export default function LandingPage() {
           <Reveal>
             <SectionLabel>Schedule</SectionLabel>
             <h2 className="text-[clamp(2rem,4.8vw,4.8rem)] font-black leading-[1.1] [word-break:keep-all]">
-              2026년 8월 개강반 학사일정
+              2026년 9월 3기 학사일정
             </h2>
           </Reveal>
           <div>
@@ -439,7 +439,7 @@ export default function LandingPage() {
             <div className="border-y border-line py-8">
               <p className="text-sm font-black uppercase tracking-[0.18em] text-signal">Course Fee</p>
               <p className="mt-3 text-[clamp(2.8rem,8vw,6.5rem)] font-black leading-none">월 15만원</p>
-              <p className="mt-3 text-lg font-black text-smoke">4개월 과정</p>
+              <p className="mt-3 text-lg font-black text-smoke">9월 1일 개강 · 12월 1일 종료 예정</p>
               <p className="mt-4 text-sm font-medium leading-6 text-muted">
                 현장체험, 피드백, 수료 인증, 편입 트랙까지 포함한 월 수강료입니다.
               </p>
@@ -478,7 +478,7 @@ export default function LandingPage() {
             Apply
           </p>
           <h2 className="mx-auto max-w-[700px] text-[clamp(2.1rem,5.2vw,5rem)] font-black leading-[1.14] [word-break:keep-all]">
-            <span className="block">16주 뒤,</span>
+            <span className="block">16강 뒤,</span>
             <span className="block">“엔터 좋아해요”가 아니라</span>
             <span className="block text-smoke">“제가 만들었습니다.”</span>
           </h2>
@@ -516,9 +516,14 @@ export default function LandingPage() {
           <p className="font-bold text-bone">MJU x SEA Entertainment Portfolio Program</p>
           <p className="mt-1">From consumer to creator.</p>
         </div>
-        <a href="/archive/2026-july" className="font-bold transition hover:text-bone">
-          2026년 7월 1기 아카이브
-        </a>
+        <div className="flex flex-wrap gap-4">
+          <a href="/archive/2026-august" className="font-bold transition hover:text-bone">
+            2026년 8월 2기 아카이브
+          </a>
+          <a href="/archive/2026-july" className="font-bold transition hover:text-bone">
+            2026년 7월 1기 아카이브
+          </a>
+        </div>
       </footer>
     </main>
   );
