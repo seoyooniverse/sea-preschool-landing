@@ -88,7 +88,9 @@ export async function notifyNewApplication(application: Application) {
   const applicantText = [
     `${application.name}님, SEA 프리스쿨 ${programInfo.cohort} 신청이 접수되었습니다.`,
     `개강일: ${programInfo.startsAt}`,
-    `등록 확인을 위해 ${bankInfo.amount} 입금 안내드립니다.`,
+    `얼리버드 등록 혜택: ${bankInfo.amount}`,
+    `적용 기간: ${programInfo.earlyBirdEndsAt}까지`,
+    `${bankInfo.regularAmount}`,
     `${bankInfo.bank} ${bankInfo.account}`,
     `예금주: ${bankInfo.holder}`,
     "입금자명은 신청자명과 동일하게 진행해주세요.",

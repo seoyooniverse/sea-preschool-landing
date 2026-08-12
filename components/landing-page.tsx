@@ -437,11 +437,12 @@ export default function LandingPage() {
           </Reveal>
           <Reveal delay={0.08}>
             <div className="border-y border-line py-8">
-              <p className="text-sm font-black uppercase tracking-[0.18em] text-signal">Course Fee</p>
-              <p className="mt-3 text-[clamp(2.8rem,8vw,6.5rem)] font-black leading-none">월 15만원</p>
+              <p className="text-sm font-black uppercase tracking-[0.18em] text-signal">Early Bird</p>
+              <h3 className="mt-3 text-2xl font-black leading-tight text-bone">얼리버드 등록 혜택</h3>
+              <p className="mt-5 text-[clamp(2.8rem,8vw,6.5rem)] font-black leading-none">월 15만원</p>
               <p className="mt-3 text-lg font-black text-smoke">9월 1일 개강 · 12월 1일 종료 예정</p>
               <p className="mt-4 text-sm font-medium leading-6 text-muted">
-                현장체험, 피드백, 수료 인증, 편입 트랙까지 포함한 월 수강료입니다.
+                8월 28일까지 신청한 9월 3기 수강생에게 적용됩니다. 정규 수강료는 월 20만원입니다.
               </p>
             </div>
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
