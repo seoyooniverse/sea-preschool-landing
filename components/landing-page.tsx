@@ -21,6 +21,7 @@ import {
 import { FadeIn, Reveal } from "@/components/motion";
 
 const kakaoChatUrl = "http://pf.kakao.com/_PNSxoG/chat";
+const freeLectureUrl = kakaoChatUrl;
 
 function CTA({ href = "/apply", children, variant = "primary" }: { href?: string; children: React.ReactNode; variant?: "primary" | "secondary" }) {
   return (
@@ -466,6 +467,37 @@ export default function LandingPage() {
         </div>
       </SectionShell>
 
+      <SectionShell id="free-lecture" className="border-y border-line">
+        <div className="grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
+          <Reveal>
+            <SectionLabel>Free Lecture</SectionLabel>
+            <h2 className="text-[clamp(2rem,4.8vw,4.8rem)] font-black leading-[1.1] [word-break:keep-all]">
+              편입도, 엔터 취업도
+              <span className="block text-smoke">감으로 준비하지 않도록.</span>
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1} className="border-y border-line py-8">
+            <p className="text-sm font-black text-signal">8월 29일 저녁 무료 특강</p>
+            <p className="mt-5 max-w-[640px] text-base font-medium leading-7 text-smoke sm:text-lg sm:leading-8">
+              명지대 편입 트랙과 엔터 취업 포트폴리오 준비 방향을 먼저 안내합니다.
+              특강 안내와 입장 링크는 오픈채팅방에서 전달됩니다.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a
+                href={freeLectureUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-[#FEE500] px-8 text-base font-black text-[#191919] transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
+              >
+                무료 특강 신청하기
+                <ArrowRight aria-hidden="true" className="h-4 w-4" />
+              </a>
+              <CTA>9월 3기 바로 신청하기</CTA>
+            </div>
+          </Reveal>
+        </div>
+      </SectionShell>
+
       <SectionShell id="faq" className="border-y border-line">
         <Reveal>
           <SectionLabel>FAQ</SectionLabel>
@@ -495,8 +527,17 @@ export default function LandingPage() {
           <p className="mx-auto mt-7 max-w-[560px] text-base font-medium leading-7 text-muted">
             관심을 결과물로 바꾸는 첫 번째 프로젝트.
           </p>
-          <div className="mt-10 flex justify-center">
+          <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
             <CTA>지원하기</CTA>
+            <a
+              href={freeLectureUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-14 min-w-[148px] items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line bg-transparent px-8 text-base font-bold text-bone outline-none transition duration-300 hover:border-bone focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+            >
+              무료 특강 신청하기
+              <ArrowRight aria-hidden="true" className="h-4 w-4" />
+            </a>
           </div>
         </Reveal>
       </SectionShell>

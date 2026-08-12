@@ -6,6 +6,7 @@ export const navItems = [
   { label: "Faculty", href: "#faculty" },
   { label: "Schedule", href: "#schedule" },
   { label: "Price", href: "#price" },
+  { label: "Free Lecture", href: "#free-lecture" },
   { label: "FAQ", href: "#faq" },
 ];
 
