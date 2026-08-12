@@ -77,8 +77,12 @@ export default function ApplyPage() {
               <p className="text-sm font-black text-signal">입금 안내</p>
               <dl className="mt-5 grid gap-3 text-sm">
                 <div className="flex justify-between gap-4">
-                  <dt className="text-muted">금액</dt>
+                  <dt className="text-muted">얼리버드</dt>
                   <dd className="font-black">{bankInfo.amount}</dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted">정규가</dt>
+                  <dd className="font-black">{bankInfo.regularAmount}</dd>
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt className="text-muted">은행</dt>

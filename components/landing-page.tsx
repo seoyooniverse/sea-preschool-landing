@@ -439,10 +439,19 @@ export default function LandingPage() {
             <div className="border-y border-line py-8">
               <p className="text-sm font-black uppercase tracking-[0.18em] text-signal">Early Bird</p>
               <h3 className="mt-3 text-2xl font-black leading-tight text-bone">얼리버드 등록 혜택</h3>
-              <p className="mt-5 text-[clamp(2.8rem,8vw,6.5rem)] font-black leading-none">월 15만원</p>
-              <p className="mt-3 text-lg font-black text-smoke">9월 1일 개강 · 12월 1일 종료 예정</p>
+              <div className="mt-7 grid gap-5 sm:grid-cols-2">
+                <div className="border-t border-line pt-5">
+                  <p className="text-sm font-black text-muted">정규 수강료</p>
+                  <p className="mt-3 text-[clamp(2.3rem,6vw,5rem)] font-black leading-none text-smoke">월 20만원</p>
+                </div>
+                <div className="border-t border-signal pt-5">
+                  <p className="text-sm font-black text-signal">8월 28일까지 신청 시</p>
+                  <p className="mt-3 text-[clamp(2.3rem,6vw,5rem)] font-black leading-none">월 15만원</p>
+                </div>
+              </div>
+              <p className="mt-6 text-lg font-black text-smoke">9월 1일 개강 · 12월 1일 종료 예정</p>
               <p className="mt-4 text-sm font-medium leading-6 text-muted">
-                8월 28일까지 신청한 9월 3기 수강생에게 적용됩니다. 정규 수강료는 월 20만원입니다.
+                9월 3기 수강생에게 적용되는 선등록 혜택입니다. 신청서 제출 후 첫 달 수강료 150,000원을 입금하면 등록 확인이 진행됩니다.
               </p>
             </div>
             <div className="mt-8 grid gap-3 sm:grid-cols-2">

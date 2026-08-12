@@ -34,8 +34,12 @@ export default async function CompletePage({ searchParams }: CompletePageProps) 
             <p className="text-sm font-black text-signal">등록 안내</p>
             <dl className="mt-7 grid gap-5">
               <div className="grid grid-cols-[90px_1fr] gap-4 border-t border-line pt-5">
-                <dt className="text-sm font-semibold text-muted">금액</dt>
+                <dt className="text-sm font-semibold text-muted">얼리버드</dt>
                 <dd className="text-2xl font-black">{bankInfo.amount}</dd>
+              </div>
+              <div className="grid grid-cols-[90px_1fr] gap-4 border-t border-line pt-5">
+                <dt className="text-sm font-semibold text-muted">정규가</dt>
+                <dd className="text-lg font-black">{bankInfo.regularAmount}</dd>
               </div>
               <div className="grid grid-cols-[90px_1fr] gap-4 border-t border-line pt-5">
                 <dt className="text-sm font-semibold text-muted">은행</dt>
