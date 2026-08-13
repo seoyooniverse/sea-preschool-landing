@@ -25,7 +25,7 @@ export default async function CompletePage({ searchParams }: CompletePageProps) 
               <span className="block text-smoke">등록 안내를 확인해주세요.</span>
             </h1>
             <p className="mt-7 max-w-[560px] text-base font-medium leading-7 text-muted">
-              신청 내용을 확인한 뒤, 첫 달 수강료 입금 확인까지 완료되면 최종 등록 안내를 보내드립니다.
+              신청 내용을 확인한 뒤, 수강료 입금 확인까지 완료되면 최종 등록 안내를 보내드립니다.
             </p>
             {params.id ? (
               <p className="mt-5 text-xs font-semibold text-muted">접수번호: {params.id}</p>

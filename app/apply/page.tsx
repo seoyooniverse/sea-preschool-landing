@@ -72,7 +72,7 @@ export default function ApplyPage() {
               <span className="block text-smoke">{programInfo.cohort}</span>
             </h1>
             <p className="mt-6 max-w-[520px] text-base font-medium leading-7 text-muted">
-              기본 정보를 남겨주시면 운영팀이 신청 내용을 확인합니다. 첫 달 수강료 입금 확인 후 최종 등록이 완료됩니다.
+              기본 정보를 남겨주시면 운영팀이 신청 내용을 확인합니다. 수강료 입금 확인 후 최종 등록이 완료됩니다.
             </p>
 
             <div className="mt-10 border-y border-line py-7">
