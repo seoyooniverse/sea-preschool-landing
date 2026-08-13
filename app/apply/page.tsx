@@ -160,7 +160,7 @@ export default function ApplyPage() {
             <div className="grid gap-5 py-6">
               <label>
                 <span className={labelClass}>이번 과정을 통해 얻고 싶은 것 *</span>
-                <textarea className={`${inputClass} min-h-28 resize-y`} name="goal" required placeholder="예: 엔터 회사에 제출할 작업물을 만들고 싶어요." />
+                <textarea className={`${inputClass} min-h-28 resize-y`} name="goal" required placeholder="예: 엔터 회사에 제출할 작업물을 만들고 싶어요. / 명지대학교 편입을 준비하고 싶어요." />
               </label>
               <label>
                 <span className={labelClass}>지원 동기 *</span>
