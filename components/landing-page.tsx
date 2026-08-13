@@ -19,6 +19,7 @@ import {
   proofPoints,
 } from "@/lib/content";
 import { FadeIn, Reveal } from "@/components/motion";
+import { getProgramPricing } from "@/lib/pricing";
 
 const kakaoChatUrl = "http://pf.kakao.com/_PNSxoG/chat";
 const freeLectureUrl = kakaoChatUrl;
@@ -61,6 +62,7 @@ export default function LandingPage() {
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 0.28], [0, -90]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.24], [1, 0.25]);
+  const pricing = getProgramPricing();
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-ink text-bone">
@@ -445,18 +447,18 @@ export default function LandingPage() {
               <p className="text-sm font-black uppercase tracking-[0.18em] text-signal">Early Bird</p>
               <h3 className="mt-3 text-2xl font-black leading-tight text-bone">얼리버드 등록 혜택</h3>
               <div className="mt-7 grid gap-5 sm:grid-cols-2">
-                <div className="border-t border-line pt-5">
-                  <p className="text-sm font-black text-muted">정규 수강료</p>
-                  <p className="mt-3 text-[clamp(2.3rem,6vw,5rem)] font-black leading-none text-smoke">월 20만원</p>
-                </div>
                 <div className="border-t border-signal pt-5">
-                  <p className="text-sm font-black text-signal">8월 28일까지 신청 시</p>
-                  <p className="mt-3 text-[clamp(2.3rem,6vw,5rem)] font-black leading-none">월 15만원</p>
+                  <p className="text-sm font-black text-signal">{pricing.earlyBirdActive ? "8월 28일까지 신청 시" : "현재 적용 수강료"}</p>
+                  <p className="mt-3 text-[clamp(2.3rem,6vw,5rem)] font-black leading-none">{pricing.earlyBirdActive ? "월 15만원" : "월 20만원"}</p>
+                </div>
+                <div className="border-t border-line pt-5">
+                  <p className="text-sm font-black text-muted">{pricing.earlyBirdActive ? "정규 수강료" : "얼리버드 혜택"}</p>
+                  <p className="mt-3 text-[clamp(2.3rem,6vw,5rem)] font-black leading-none text-smoke">{pricing.earlyBirdActive ? "월 20만원" : "8월 28일 종료"}</p>
                 </div>
               </div>
               <p className="mt-6 text-lg font-black text-smoke">9월 1일 개강 · 12월 1일 종료 예정</p>
               <p className="mt-4 text-sm font-medium leading-6 text-muted">
-                9월 3기 수강생에게 적용되는 선등록 혜택입니다. 신청서 제출 후 첫 달 수강료 150,000원을 입금하면 등록 확인이 진행됩니다.
+                {pricing.description} 신청서 제출 후 첫 달 수강료 {pricing.amount}을 입금하면 등록 확인이 진행됩니다.
               </p>
             </div>
             <div className="mt-8 grid gap-3 sm:grid-cols-2">

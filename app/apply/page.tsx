@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Send } from "lucide-react";
 import { bankInfo, programInfo } from "@/lib/program";
+import { getProgramPricing } from "@/lib/pricing";
 
 type SubmitState = "idle" | "submitting" | "error";
 
@@ -53,6 +54,7 @@ export default function ApplyPage() {
     "w-full border border-line bg-transparent px-4 py-3 text-base text-bone outline-none transition placeholder:text-muted focus:border-bone";
   const selectClass = `${inputClass} [color-scheme:dark] [&_option]:bg-ink [&_option]:text-bone`;
   const labelClass = "mb-2 block text-sm font-black text-smoke";
+  const pricing = getProgramPricing();
 
   return (
     <main className="min-h-screen bg-ink px-[var(--page-x)] py-8 text-bone">
@@ -70,35 +72,31 @@ export default function ApplyPage() {
               <span className="block text-smoke">{programInfo.cohort}</span>
             </h1>
             <p className="mt-6 max-w-[520px] text-base font-medium leading-7 text-muted">
-              기본 정보를 남겨주시면 운영팀이 신청 내용을 확인합니다. 얼리버드 첫 달 수강료 입금 확인 후 최종 등록이 완료됩니다.
+              기본 정보를 남겨주시면 운영팀이 신청 내용을 확인합니다. 첫 달 수강료 입금 확인 후 최종 등록이 완료됩니다.
             </p>
 
             <div className="mt-10 border-y border-line py-7">
               <p className="text-sm font-black text-signal">입금 안내</p>
               <dl className="mt-5 grid gap-3 text-sm">
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted">얼리버드</dt>
-                  <dd className="font-black">{bankInfo.amount}</dd>
+                <div className="grid grid-cols-[82px_minmax(0,1fr)] gap-4">
+                  <dt className="text-muted">{pricing.activeLabel}</dt>
+                  <dd className="text-right font-black leading-5 [word-break:keep-all]">{pricing.bankLabel}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted">정규가</dt>
-                  <dd className="font-black">{bankInfo.regularAmount}</dd>
-                </div>
-                <div className="flex justify-between gap-4">
+                <div className="grid grid-cols-[82px_minmax(0,1fr)] gap-4">
                   <dt className="text-muted">은행</dt>
-                  <dd className="font-black">{bankInfo.bank}</dd>
+                  <dd className="text-right font-black">{bankInfo.bank}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
+                <div className="grid grid-cols-[82px_minmax(0,1fr)] gap-4">
                   <dt className="text-muted">계좌</dt>
-                  <dd className="font-black">{bankInfo.account}</dd>
+                  <dd className="text-right font-black">{bankInfo.account}</dd>
                 </div>
-                <div className="flex justify-between gap-4">
+                <div className="grid grid-cols-[82px_minmax(0,1fr)] gap-4">
                   <dt className="text-muted">예금주</dt>
-                  <dd className="font-black">{bankInfo.holder}</dd>
+                  <dd className="text-right font-black">{bankInfo.holder}</dd>
                 </div>
               </dl>
               <p className="mt-5 text-xs font-medium leading-5 text-muted">
-                8월 28일까지 신청 시 얼리버드 등록 혜택으로 월 15만원이 적용됩니다. 정규 수강료는 월 20만원입니다. 입금자명은 신청자명과 동일하게 입력해주세요.
+                {pricing.description} 입금자명은 신청자명과 동일하게 입력해주세요.
               </p>
             </div>
           </div>

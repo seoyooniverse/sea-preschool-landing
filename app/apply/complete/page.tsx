@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { bankInfo } from "@/lib/program";
+import { getProgramPricing } from "@/lib/pricing";
 
 type CompletePageProps = {
   searchParams: Promise<{ id?: string }>;
@@ -8,6 +9,7 @@ type CompletePageProps = {
 
 export default async function CompletePage({ searchParams }: CompletePageProps) {
   const params = await searchParams;
+  const pricing = getProgramPricing();
 
   return (
     <main className="min-h-screen bg-ink px-[var(--page-x)] py-8 text-bone">
@@ -23,7 +25,7 @@ export default async function CompletePage({ searchParams }: CompletePageProps) 
               <span className="block text-smoke">등록 안내를 확인해주세요.</span>
             </h1>
             <p className="mt-7 max-w-[560px] text-base font-medium leading-7 text-muted">
-              신청 내용을 확인한 뒤, 얼리버드 첫 달 수강료 입금 확인까지 완료되면 최종 등록 안내를 보내드립니다.
+              신청 내용을 확인한 뒤, 첫 달 수강료 입금 확인까지 완료되면 최종 등록 안내를 보내드립니다.
             </p>
             {params.id ? (
               <p className="mt-5 text-xs font-semibold text-muted">접수번호: {params.id}</p>
@@ -33,23 +35,19 @@ export default async function CompletePage({ searchParams }: CompletePageProps) 
           <div className="border-y border-line py-8">
             <p className="text-sm font-black text-signal">등록 안내</p>
             <dl className="mt-7 grid gap-5">
-              <div className="grid grid-cols-[90px_1fr] gap-4 border-t border-line pt-5">
-                <dt className="text-sm font-semibold text-muted">얼리버드</dt>
-                <dd className="text-2xl font-black">{bankInfo.amount}</dd>
+              <div className="grid grid-cols-[76px_minmax(0,1fr)] gap-4 border-t border-line pt-5 sm:grid-cols-[90px_1fr]">
+                <dt className="text-sm font-semibold text-muted">{pricing.activeLabel}</dt>
+                <dd className="text-xl font-black leading-tight [word-break:keep-all] sm:text-2xl">{pricing.bankLabel}</dd>
               </div>
-              <div className="grid grid-cols-[90px_1fr] gap-4 border-t border-line pt-5">
-                <dt className="text-sm font-semibold text-muted">정규가</dt>
-                <dd className="text-lg font-black">{bankInfo.regularAmount}</dd>
-              </div>
-              <div className="grid grid-cols-[90px_1fr] gap-4 border-t border-line pt-5">
+              <div className="grid grid-cols-[76px_minmax(0,1fr)] gap-4 border-t border-line pt-5 sm:grid-cols-[90px_1fr]">
                 <dt className="text-sm font-semibold text-muted">은행</dt>
                 <dd className="text-lg font-black">{bankInfo.bank}</dd>
               </div>
-              <div className="grid grid-cols-[90px_1fr] gap-4 border-t border-line pt-5">
+              <div className="grid grid-cols-[76px_minmax(0,1fr)] gap-4 border-t border-line pt-5 sm:grid-cols-[90px_1fr]">
                 <dt className="text-sm font-semibold text-muted">계좌</dt>
                 <dd className="break-all text-lg font-black">{bankInfo.account}</dd>
               </div>
-              <div className="grid grid-cols-[90px_1fr] gap-4 border-t border-line pt-5">
+              <div className="grid grid-cols-[76px_minmax(0,1fr)] gap-4 border-t border-line pt-5 sm:grid-cols-[90px_1fr]">
                 <dt className="text-sm font-semibold text-muted">예금주</dt>
                 <dd className="text-lg font-black">{bankInfo.holder}</dd>
               </div>
@@ -58,7 +56,7 @@ export default async function CompletePage({ searchParams }: CompletePageProps) 
             <div className="mt-8 border-t border-line pt-6">
               <p className="text-sm font-black text-bone">다음 단계</p>
               <ol className="mt-4 grid gap-3 text-sm font-medium leading-6 text-muted">
-                <li>1. 신청자명과 동일한 입금자명으로 얼리버드 첫 달 수강료 150,000원을 입금해주세요.</li>
+                <li>1. {pricing.nextStep}</li>
                 <li>2. 운영팀이 신청서와 입금 내역을 확인합니다.</li>
                 <li>3. 최종 등록 안내가 문자 또는 이메일로 발송됩니다.</li>
               </ol>

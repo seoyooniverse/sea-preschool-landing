@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import type { Application } from "@/lib/applications";
 import { bankInfo, programInfo } from "@/lib/program";
+import { getProgramPricing } from "@/lib/pricing";
 
 const SOLAPI_ENDPOINT = "https://api.solapi.com/messages/v4/send";
 
@@ -79,6 +80,7 @@ async function sendSolapiMessage(config: SolapiConfig, to: string, text: string)
 
 export async function notifyNewApplication(application: Application) {
   const config = getSolapiConfig();
+  const pricing = getProgramPricing(new Date(application.createdAt));
 
   if (!config) {
     console.warn("Solapi notification skipped: missing SOLAPI_API_KEY, SOLAPI_API_SECRET, or SOLAPI_FROM.");
@@ -88,9 +90,8 @@ export async function notifyNewApplication(application: Application) {
   const applicantText = [
     `${application.name}님, SEA 프리스쿨 ${programInfo.cohort} 신청이 접수되었습니다.`,
     `개강일: ${programInfo.startsAt}`,
-    `얼리버드 등록 혜택: ${bankInfo.amount}`,
-    `적용 기간: ${programInfo.earlyBirdEndsAt}까지`,
-    `${bankInfo.regularAmount}`,
+    `${pricing.activeLabel}: ${pricing.bankLabel}`,
+    ...(pricing.earlyBirdActive ? [`적용 기간: ${programInfo.earlyBirdEndsAt}까지`] : []),
     `${bankInfo.bank} ${bankInfo.account}`,
     `예금주: ${bankInfo.holder}`,
     "입금자명은 신청자명과 동일하게 진행해주세요.",
