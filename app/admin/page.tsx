@@ -1,5 +1,6 @@
 import { readApplications } from "@/lib/applications";
 import { normalizeCohort } from "@/lib/cohorts";
+import { notifyApplicationApproved } from "@/lib/notifications";
 import { enrollStudentFromApplication, normalizeEmail, readStudents } from "@/lib/students";
 import { readSubmissions } from "@/lib/submissions";
 import { redirect } from "next/navigation";
@@ -28,6 +29,13 @@ async function approveStudent(formData: FormData) {
     } catch (error) {
       console.error(error);
       redirect(`/admin?key=${encodeURIComponent(key)}&error=approval`);
+    }
+
+    try {
+      await notifyApplicationApproved(application);
+    } catch (error) {
+      console.error(error);
+      redirect(`/admin?key=${encodeURIComponent(key)}&error=sms`);
     }
   }
 
@@ -87,6 +95,11 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             {params.error === "approval" ? (
               <div className="mb-6 border border-signal/40 bg-signal/10 p-4 text-sm font-bold leading-6 text-smoke">
                 승인 저장에 실패했습니다. Supabase에 `students` 테이블이 만들어져 있는지 확인해주세요.
+              </div>
+            ) : null}
+            {params.error === "sms" ? (
+              <div className="mb-6 border border-signal/40 bg-signal/10 p-4 text-sm font-bold leading-6 text-smoke">
+                수강생 승인은 완료됐지만 등록 완료 문자 발송에 실패했습니다. Solapi 환경변수와 발신번호 설정을 확인해주세요.
               </div>
             ) : null}
             <div className="mb-6 flex flex-col gap-2 text-sm font-bold text-muted sm:flex-row sm:items-center sm:justify-between">
@@ -163,7 +176,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                             disabled={approved}
                             className="rounded-full border border-line px-5 py-2 text-xs font-black transition hover:border-bone hover:bg-bone hover:text-ink disabled:cursor-not-allowed disabled:opacity-45"
                           >
-                            {approved ? "로그인 허용됨" : "수강생으로 승인"}
+                            {approved ? "승인 완료" : "입금 확인 후 승인"}
                           </button>
                         </form>
                       </div>
