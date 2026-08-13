@@ -115,15 +115,15 @@ export default function LandingPage() {
           <FadeIn className="max-w-[900px]">
             <p className="mb-5 text-xs font-black uppercase tracking-[0.2em] text-signal">MJU x SEA</p>
             <h1 className="max-w-[760px] text-[clamp(2.25rem,6.2vw,5.8rem)] font-black leading-[1.14] [word-break:keep-all]">
-              <span className="block">엔터 취업 포트폴리오.</span>
-              <span className="block text-smoke">팬심을 스펙으로</span>
-              <span className="block text-smoke">바꾸는 16강.</span>
+              <span className="block">인서울 편입과</span>
+              <span className="block text-smoke">엔터 취업을 연결하는</span>
+              <span className="block text-smoke">16강 프로젝트.</span>
             </h1>
           </FadeIn>
 
           <FadeIn delay={0.12} className="max-w-read lg:pb-3">
             <p className="max-w-[520px] text-[15px] font-medium leading-7 text-smoke sm:text-lg">
-              좋아하는 마음을 취업 언어로 바꾸고, 지원서에서 보여줄 수 있는 결과물로 남깁니다.
+              막연한 진로 고민을 실무 경험과 포트폴리오로 바꾸고, 편입과 취업 지원서에 담을 근거를 만듭니다.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <CTA>지원하기</CTA>
@@ -153,7 +153,8 @@ export default function LandingPage() {
           <Reveal>
             <SectionLabel>Industry Proof</SectionLabel>
             <h2 className="max-w-[680px] text-[clamp(2rem,4.8vw,4.8rem)] font-black leading-[1.1] [word-break:keep-all]">
-              업계가 평가하는 방식으로
+              편입과 취업,
+              <span className="block text-smoke">둘 다 보는 방식으로.</span>
             </h2>
           </Reveal>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -171,8 +172,8 @@ export default function LandingPage() {
         <Reveal className="max-w-[980px]">
           <SectionLabel>Problem</SectionLabel>
           <h2 className="max-w-[760px] text-[clamp(2.15rem,5vw,5rem)] font-black leading-[1.1] [word-break:keep-all]">
-            엔터 취업,
-            <span className="block text-muted">말보다 보여줄 게 필요합니다.</span>
+            아직 답을 못 찾았다면,
+            <span className="block text-muted">지금부터 선택지를 만드세요.</span>
           </h2>
         </Reveal>
         <div className="mt-10 grid gap-0 border-y border-line lg:grid-cols-3">
@@ -191,16 +192,17 @@ export default function LandingPage() {
           <Reveal>
             <SectionLabel>Solution</SectionLabel>
             <h2 className="text-[clamp(2.1rem,5vw,5rem)] font-black leading-[1.1] [word-break:keep-all]">
-              강의가 아니라
-              <span className="block text-signal">프로젝트.</span>
+              편입 가산점과
+              <span className="block text-signal">취업 포트폴리오.</span>
             </h2>
           </Reveal>
           <Reveal delay={0.1} className="max-w-read">
             <p className="text-base font-medium leading-7 text-smoke sm:text-lg sm:leading-8">
               하나의 아티스트를 정하고, 시장·브랜드·사운드·비주얼·마케팅을 하나의 흐름으로 설계합니다.
+              결과물은 편입과 취업을 동시에 설명하는 포트폴리오가 됩니다.
             </p>
             <p className="mt-5 text-xl font-black leading-snug">
-              마지막에는 “제가 만든 결과물입니다”라고 보여줄 수 있어야 하니까.
+              막연한 관심이 아니라, 다음 선택지를 만드는 실무 근거로 남겨야 하니까.
             </p>
           </Reveal>
           <Reveal delay={0.16} className="relative min-h-[260px] overflow-hidden border border-line sm:min-h-[360px] lg:min-h-[460px]">
@@ -220,7 +222,8 @@ export default function LandingPage() {
         <Reveal>
           <SectionLabel>Outcome</SectionLabel>
           <h2 className="max-w-[700px] text-[clamp(2.05rem,5vw,5rem)] font-black leading-[1.1] [word-break:keep-all]">
-            취업 준비가 달라지는 이유
+            편입과 취업 준비가
+            <span className="block text-smoke">같이 달라지는 이유</span>
           </h2>
         </Reveal>
         <div className="mt-10 divide-y divide-line">
@@ -239,7 +242,7 @@ export default function LandingPage() {
           <Reveal>
             <SectionLabel>Portfolio Journey</SectionLabel>
             <h2 className="text-[clamp(2rem,4.8vw,4.8rem)] font-black leading-[1.1] [word-break:keep-all]">
-              팬심은 이렇게 <span className="text-signal">실무 언어</span>가 됩니다.
+              관심은 이렇게 <span className="text-signal">실무 언어</span>가 됩니다.
             </h2>
           </Reveal>
           <div className="space-y-3">
@@ -260,7 +263,8 @@ export default function LandingPage() {
         <Reveal>
           <SectionLabel>Outputs</SectionLabel>
           <h2 className="max-w-[680px] text-[clamp(1.75rem,3.8vw,4rem)] font-black leading-[1.16] [word-break:keep-all]">
-            매주 결과물이 쌓입니다.
+            매주 하나씩,
+            <span className="block text-smoke">편입·취업 근거가 쌓입니다.</span>
           </h2>
         </Reveal>
         <Reveal delay={0.1} className="mt-10 flex flex-wrap gap-3">
@@ -311,7 +315,7 @@ export default function LandingPage() {
             </div>
             <div className="border-t border-signal pt-7">
               <p className="text-sm font-bold text-signal">MJU x SEA</p>
-              <p className="mt-3 text-2xl font-black">기획한다 → 만든다 → 나를 보여준다</p>
+              <p className="mt-3 text-2xl font-black">기획한다 → 만든다 → 선택지가 생긴다</p>
             </div>
           </Reveal>
         </div>
@@ -472,14 +476,14 @@ export default function LandingPage() {
           <Reveal>
             <SectionLabel>Free Lecture</SectionLabel>
             <h2 className="text-[clamp(2rem,4.8vw,4.8rem)] font-black leading-[1.1] [word-break:keep-all]">
-              편입도, 엔터 취업도
-              <span className="block text-smoke">감으로 준비하지 않도록.</span>
+              인서울 편입과
+              <span className="block text-smoke">엔터 취업의 방향을 먼저 잡습니다.</span>
             </h2>
           </Reveal>
           <Reveal delay={0.1} className="border-y border-line py-8">
             <p className="text-sm font-black text-signal">8월 29일 저녁 무료 특강</p>
             <p className="mt-5 max-w-[640px] text-base font-medium leading-7 text-smoke sm:text-lg sm:leading-8">
-              명지대 편입 트랙과 엔터 취업 포트폴리오 준비 방향을 먼저 안내합니다.
+              명지대 편입 가산점 트랙과 콘텐츠·미디어·엔터 취업 포트폴리오 준비 방향을 먼저 안내합니다.
               특강 안내와 입장 링크는 오픈채팅방에서 전달됩니다.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -521,11 +525,11 @@ export default function LandingPage() {
           </p>
           <h2 className="mx-auto max-w-[700px] text-[clamp(2.1rem,5.2vw,5rem)] font-black leading-[1.14] [word-break:keep-all]">
             <span className="block">16강 뒤,</span>
-            <span className="block">“엔터 좋아해요”가 아니라</span>
-            <span className="block text-smoke">“제가 만들었습니다.”</span>
+            <span className="block">막연한 진로 고민이 아니라</span>
+            <span className="block text-smoke">보여줄 결과가 남습니다.</span>
           </h2>
           <p className="mx-auto mt-7 max-w-[560px] text-base font-medium leading-7 text-muted">
-            관심을 결과물로 바꾸는 첫 번째 프로젝트.
+            편입과 엔터 취업, 더 넓은 선택지를 만드는 첫 번째 프로젝트.
           </p>
           <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
             <CTA>지원하기</CTA>
