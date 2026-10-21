@@ -187,21 +187,23 @@ export async function findActiveStudentByNameAndPhone(name: string, phone: strin
   }
 
   const [students, applications] = await Promise.all([readStudents(), readApplications()]);
-  const application = applications.find(
+  const matchingApplications = applications.filter(
     (item) => normalizeName(item.name) === normalizedName && normalizePhone(item.phone) === normalizedPhone,
   );
 
-  if (!application) {
+  if (matchingApplications.length === 0) {
     return null;
   }
 
-  return (
-    students.find(
-      (student) =>
-        student.status === "active" &&
-        (student.sourceApplicationId === application.id || normalizeEmail(student.email) === normalizeEmail(application.email)),
-    ) ?? null
-  );
+  const matchingApplicationIds = new Set(matchingApplications.map((application) => application.id));
+  const matchingEmails = new Set(matchingApplications.map((application) => normalizeEmail(application.email)));
+
+  return students.find(
+    (student) =>
+      student.status === "active" &&
+      ((student.sourceApplicationId && matchingApplicationIds.has(student.sourceApplicationId)) ||
+        matchingEmails.has(normalizeEmail(student.email))),
+  ) ?? null;
 }
 
 export async function enrollStudentFromApplication(application: Application) {
