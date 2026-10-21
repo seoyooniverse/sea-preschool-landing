@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
-import type { Application } from "@/lib/applications";
+import { readApplications, type Application } from "@/lib/applications";
 import { normalizeCohort } from "@/lib/cohorts";
 
 export type Student = {
@@ -30,6 +30,14 @@ type SupabaseStudentRow = {
 
 export function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
+}
+
+export function normalizePhone(phone: string) {
+  return phone.replace(/\D/g, "");
+}
+
+function normalizeName(name: string) {
+  return name.trim().replace(/\s+/g, "");
 }
 
 function hasSupabaseConfig() {
@@ -168,6 +176,32 @@ export async function findActiveStudentByEmail(email: string) {
   const normalized = normalizeEmail(email);
   const students = await readStudents();
   return students.find((student) => normalizeEmail(student.email) === normalized && student.status === "active") ?? null;
+}
+
+export async function findActiveStudentByNameAndPhone(name: string, phone: string) {
+  const normalizedName = normalizeName(name);
+  const normalizedPhone = normalizePhone(phone);
+
+  if (!normalizedName || !normalizedPhone) {
+    return null;
+  }
+
+  const [students, applications] = await Promise.all([readStudents(), readApplications()]);
+  const application = applications.find(
+    (item) => normalizeName(item.name) === normalizedName && normalizePhone(item.phone) === normalizedPhone,
+  );
+
+  if (!application) {
+    return null;
+  }
+
+  return (
+    students.find(
+      (student) =>
+        student.status === "active" &&
+        (student.sourceApplicationId === application.id || normalizeEmail(student.email) === normalizeEmail(application.email)),
+    ) ?? null
+  );
 }
 
 export async function enrollStudentFromApplication(application: Application) {

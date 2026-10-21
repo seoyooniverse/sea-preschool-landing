@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, LogIn, Mail } from "lucide-react";
+import { ArrowLeft, LogIn, Phone, UserRound } from "lucide-react";
 
 type SubmitState = "idle" | "submitting" | "error";
 
@@ -22,7 +22,7 @@ export default function LoginPage() {
     const response = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: data.get("email") }),
+      body: JSON.stringify({ name: data.get("name"), phone: data.get("phone") }),
     });
     const result = await response.json();
 
@@ -52,36 +52,52 @@ export default function LoginPage() {
               Student Login
             </p>
             <h1 className="text-[clamp(2.4rem,7vw,6rem)] font-black leading-[1.08] [word-break:keep-all]">
-              등록된 이메일로
+              이름과 휴대폰 번호로
               <span className="block text-smoke">포털에 입장합니다.</span>
             </h1>
             <p className="mt-6 max-w-[560px] text-base font-medium leading-7 text-muted">
-              지원서 제출 후 운영팀이 수강생으로 승인한 이메일만 로그인할 수 있습니다.
+              신청서에 작성한 정보와 동일하게 입력해주세요. 수강생 승인 후 로그인할 수 있습니다.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="self-start border-y border-line py-8">
+          <form onSubmit={handleSubmit} className="grid self-start gap-5 border-y border-line py-8">
             <label>
-              <span className="mb-3 block text-sm font-black text-smoke">수강생 이메일</span>
+              <span className="mb-3 block text-sm font-black text-smoke">이름</span>
               <span className="flex min-h-14 items-center gap-3 border border-line px-4 transition focus-within:border-bone">
-                <Mail aria-hidden="true" className="h-5 w-5 text-signal" />
+                <UserRound aria-hidden="true" className="h-5 w-5 text-signal" />
                 <input
-                  name="email"
-                  type="email"
-                  autoComplete="email"
+                  name="name"
+                  type="text"
+                  autoComplete="name"
                   required
-                  placeholder="you@email.com"
+                  placeholder="신청자 이름"
                   className="min-w-0 flex-1 bg-transparent text-base text-bone outline-none placeholder:text-muted"
                 />
               </span>
             </label>
 
-            {message ? <p className="mt-5 text-sm font-bold leading-6 text-signal">{message}</p> : null}
+            <label>
+              <span className="mb-3 block text-sm font-black text-smoke">휴대폰 번호</span>
+              <span className="flex min-h-14 items-center gap-3 border border-line px-4 transition focus-within:border-bone">
+                <Phone aria-hidden="true" className="h-5 w-5 text-signal" />
+                <input
+                  name="phone"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  required
+                  placeholder="010-0000-0000"
+                  className="min-w-0 flex-1 bg-transparent text-base text-bone outline-none placeholder:text-muted"
+                />
+              </span>
+            </label>
+
+            {message ? <p className="text-sm font-bold leading-6 text-signal">{message}</p> : null}
 
             <button
               type="submit"
               disabled={state === "submitting"}
-              className="mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-bone px-7 text-sm font-black text-ink transition hover:bg-signal hover:text-bone disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-bone px-7 text-sm font-black text-ink transition hover:bg-signal hover:text-bone disabled:cursor-not-allowed disabled:opacity-60"
             >
               {state === "submitting" ? "확인 중" : "포털 입장"}
               <LogIn aria-hidden="true" className="h-4 w-4" />
