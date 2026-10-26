@@ -1,4 +1,9 @@
-import { isAugustCohort, isSeptemberCohort } from "@/lib/cohorts";
+import {
+  JULY_COHORT,
+  isAugustCohort,
+  isSeptemberCohort,
+  normalizeCohort,
+} from "@/lib/cohorts";
 
 export type PortalVideo = {
   label: string;
@@ -40,6 +45,38 @@ const week15Videos: PortalVideo[] = [
     label: "15강 2교시",
     watchUrl: "https://youtu.be/oFjaIEUbnq8",
     embedUrl: "https://www.youtube-nocookie.com/embed/oFjaIEUbnq8",
+  },
+];
+
+const julyLessons: PortalLesson[] = [
+  {
+    week: "13강",
+    date: "2026.10.06(화)",
+    dateKey: 20261006,
+    time: "00:00 공개",
+    mode: "인강",
+    instructor: "문원경 교수",
+    title: "유통·저작권·퍼블리싱 실무",
+    videos: week13Videos,
+  },
+  {
+    week: "14강",
+    date: "2026.10.13(화)",
+    dateKey: 20261013,
+    time: "20:00-22:00",
+    mode: "실시간",
+    instructor: "안서윤 교수",
+    title: "소셜 마케팅 트렌드 & SEO",
+  },
+  {
+    week: "15강",
+    date: "2026.10.20(화)",
+    dateKey: 20261020,
+    time: "00:00 공개",
+    mode: "인강",
+    instructor: "문원경 교수",
+    title: "글로벌 역주행 전략",
+    videos: week15Videos,
   },
 ];
 
@@ -108,6 +145,10 @@ const septemberLessons: PortalLesson[] = [
 ];
 
 export function getPortalLessons(cohort: string) {
+  if (normalizeCohort(cohort) === JULY_COHORT) {
+    return julyLessons;
+  }
+
   if (isAugustCohort(cohort)) {
     return augustLessons;
   }
