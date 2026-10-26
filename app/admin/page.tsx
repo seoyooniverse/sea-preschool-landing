@@ -1,8 +1,9 @@
 import { readApplications } from "@/lib/applications";
 import { normalizeCohort } from "@/lib/cohorts";
 import { notifyApplicationApproved } from "@/lib/notifications";
-import { enrollStudentFromApplication, normalizeEmail, readStudents } from "@/lib/students";
+import { PORTAL_PREVIEW_EMAIL, enrollStudentFromApplication, normalizeEmail, readStudents } from "@/lib/students";
 import { readSubmissions } from "@/lib/submissions";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 type AdminPageProps = {
@@ -40,6 +41,28 @@ async function approveStudent(formData: FormData) {
   }
 
   redirect(`/admin?key=${encodeURIComponent(key)}`);
+}
+
+async function openPortalPreview(formData: FormData) {
+  "use server";
+
+  const key = String(formData.get("key") ?? "").trim();
+  const adminKey = (process.env.ADMIN_KEY ?? "sea2026").trim();
+
+  if (key !== adminKey) {
+    redirect("/admin");
+  }
+
+  const cookieStore = await cookies();
+  cookieStore.set("sea_student_email", PORTAL_PREVIEW_EMAIL, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 2,
+  });
+
+  redirect("/portal");
 }
 
 export default async function AdminPage({ searchParams }: AdminPageProps) {
@@ -102,9 +125,17 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                 수강생 승인은 완료됐지만 등록 완료 문자 발송에 실패했습니다. Solapi 환경변수와 발신번호 설정을 확인해주세요.
               </div>
             ) : null}
-            <div className="mb-6 flex flex-col gap-2 text-sm font-bold text-muted sm:flex-row sm:items-center sm:justify-between">
-              <p>총 {applications.length}건 접수</p>
-              <p>포털 로그인 가능 수강생 {students.length}명</p>
+            <div className="mb-6 flex flex-col gap-4 border-y border-line py-5 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-2 text-sm font-bold text-muted sm:flex-row sm:gap-6">
+                <p>총 {applications.length}건 접수</p>
+                <p>포털 로그인 가능 수강생 {students.length}명</p>
+              </div>
+              <form action={openPortalPreview}>
+                <input type="hidden" name="key" value={enteredKey} />
+                <button className="inline-flex min-h-11 items-center justify-center rounded-lg bg-bone px-5 text-sm font-black text-ink transition hover:bg-signal hover:text-bone">
+                  강의 포털 테스트
+                </button>
+              </form>
             </div>
             <section className="mb-12">
               <h2 className="text-2xl font-black">과제 제출물</h2>

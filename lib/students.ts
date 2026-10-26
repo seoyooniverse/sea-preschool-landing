@@ -1,7 +1,9 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { readApplications, type Application } from "@/lib/applications";
-import { normalizeCohort } from "@/lib/cohorts";
+import { JULY_COHORT, normalizeCohort } from "@/lib/cohorts";
+
+export const PORTAL_PREVIEW_EMAIL = "portal-preview@sea.test";
 
 export type Student = {
   id: string;
@@ -169,6 +171,18 @@ async function writeStudents(students: Student[]) {
 }
 
 export async function findActiveStudentByEmail(email: string) {
+  if (normalizeEmail(email) === PORTAL_PREVIEW_EMAIL) {
+    return {
+      id: "portal-preview",
+      createdAt: new Date(0).toISOString(),
+      name: "운영자",
+      email: PORTAL_PREVIEW_EMAIL,
+      role: "admin" as const,
+      status: "active" as const,
+      cohort: JULY_COHORT,
+    };
+  }
+
   if (hasSupabaseConfig()) {
     return findSupabaseActiveStudentByEmail(email);
   }
