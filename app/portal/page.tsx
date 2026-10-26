@@ -44,6 +44,37 @@ function getNextLesson(lessons: PortalLesson[], todayKey: number) {
   return lessons.find((lesson) => lesson.dateKey >= todayKey) ?? lessons[lessons.length - 1] ?? null;
 }
 
+function addDaysToDateKey(dateKey: number, days: number) {
+  const value = String(dateKey);
+  const date = new Date(Date.UTC(Number(value.slice(0, 4)), Number(value.slice(4, 6)) - 1, Number(value.slice(6, 8))));
+  date.setUTCDate(date.getUTCDate() + days);
+
+  return Number(
+    `${date.getUTCFullYear()}${String(date.getUTCMonth() + 1).padStart(2, "0")}${String(date.getUTCDate()).padStart(2, "0")}`,
+  );
+}
+
+function formatDateKey(dateKey: number) {
+  const value = String(dateKey);
+  return `${value.slice(0, 4)}.${value.slice(4, 6)}.${value.slice(6, 8)}`;
+}
+
+function getLessonAvailability(lesson: PortalLesson, todayKey: number, previewAll = false) {
+  if (lesson.mode !== "인강") {
+    return "live" as const;
+  }
+
+  if (previewAll) {
+    return "open" as const;
+  }
+
+  if (todayKey < lesson.dateKey) {
+    return "upcoming" as const;
+  }
+
+  return todayKey < addDaysToDateKey(lesson.dateKey, 7) ? ("open" as const) : ("closed" as const);
+}
+
 export default async function PortalPage() {
   const cookieStore = await cookies();
   const email = cookieStore.get("sea_student_email")?.value;
@@ -56,11 +87,13 @@ export default async function PortalPage() {
   const cohort = normalizeCohort(student.cohort);
   const lessons = getPortalLessons(cohort);
   const todayKey = todayKeyInSeoul();
+  const previewAllVideos = student.role === "admin";
   const nextLesson = getNextLesson(lessons, todayKey);
+  const nextLessonAvailability = nextLesson ? getLessonAvailability(nextLesson, todayKey, previewAllVideos) : null;
   const videoLessons = lessons.filter((lesson) => lesson.mode === "인강");
   const notices = [
-    "인강은 각 기수별 공개일 00:00부터 이 페이지에서 시청할 수 있습니다.",
-    "공개된 인강은 과정 종료일까지 반복해서 시청할 수 있습니다.",
+    "인강은 각 기수별 공개일 00:00부터 7일간 시청할 수 있습니다.",
+    "공개 7일 후 00:00에 시청이 종료되므로 기간 안에 수강해주세요.",
     "실시간 수업 접속 링크는 수업 전 별도 공지됩니다.",
   ];
 
@@ -108,7 +141,7 @@ export default async function PortalPage() {
             <span className="block text-smoke">한곳에서 확인하세요.</span>
           </h1>
           <p className="mt-5 max-w-read text-base font-medium leading-7 text-smoke">
-            {student.name}님, 인강은 각 기수의 공개일부터 바로 시청할 수 있습니다. 실시간 수업 링크는 수업 전 별도로 안내됩니다.
+            {student.name}님, 인강은 각 기수의 공개일부터 7일간 시청할 수 있습니다. 실시간 수업 링크는 수업 전 별도로 안내됩니다.
           </p>
 
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
@@ -150,7 +183,7 @@ export default async function PortalPage() {
                   <dd>{nextLesson.time}</dd>
                 </div>
               </dl>
-              {nextLesson.mode === "인강" && nextLesson.dateKey <= todayKey ? (
+              {nextLessonAvailability === "open" ? (
                 <a
                   href={`#lesson-${nextLesson.week}`}
                   className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-bone px-5 text-sm font-black text-ink transition hover:bg-signal hover:text-bone focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
@@ -160,7 +193,11 @@ export default async function PortalPage() {
                 </a>
               ) : (
                 <p className="mt-7 border-t border-line pt-4 text-sm font-bold leading-6 text-muted">
-                  {nextLesson.mode === "실시간" ? "접속 링크는 수업 전 별도 공지됩니다." : `${nextLesson.date} 00:00에 공개됩니다.`}
+                  {nextLessonAvailability === "live"
+                    ? "접속 링크는 수업 전 별도 공지됩니다."
+                    : nextLessonAvailability === "closed"
+                      ? "시청 기간이 종료되었습니다."
+                      : `${nextLesson.date} 00:00에 공개됩니다.`}
                 </p>
               )}
             </>
@@ -180,7 +217,7 @@ export default async function PortalPage() {
           {lessons.length ? (
             <div className="divide-y divide-line border-y border-line">
               {lessons.map((lesson) => {
-                const open = lesson.mode === "인강" && lesson.dateKey <= todayKey;
+                const availability = getLessonAvailability(lesson, todayKey, previewAllVideos);
 
                 return (
                   <article key={lesson.week} className="grid gap-4 py-6 md:grid-cols-[110px_minmax(0,1fr)_180px] md:items-center">
@@ -196,7 +233,9 @@ export default async function PortalPage() {
                       <p className="text-sm font-black">{lesson.date}</p>
                       <p className="mt-1 text-xs font-semibold text-muted">{lesson.time}</p>
                       {lesson.mode === "인강" ? (
-                        <p className={`mt-2 text-xs font-black ${open ? "text-signal" : "text-muted"}`}>{open ? "시청 가능" : "공개 예정"}</p>
+                        <p className={`mt-2 text-xs font-black ${availability === "open" ? "text-signal" : "text-muted"}`}>
+                          {availability === "open" ? "시청 가능" : availability === "closed" ? "시청 기간 종료" : "공개 예정"}
+                        </p>
                       ) : (
                         <p className="mt-2 text-xs font-black text-signal">실시간 수업</p>
                       )}
@@ -223,7 +262,8 @@ export default async function PortalPage() {
         {videoLessons.length ? (
           <div className="divide-y divide-line border-y border-line">
             {videoLessons.map((lesson) => {
-              const open = lesson.dateKey <= todayKey;
+              const availability = getLessonAvailability(lesson, todayKey, previewAllVideos);
+              const closeDateKey = addDaysToDateKey(lesson.dateKey, 7);
 
               return (
                 <article id={`lesson-${lesson.week}`} key={lesson.week} className="scroll-mt-24 py-8 lg:py-10">
@@ -234,7 +274,7 @@ export default async function PortalPage() {
                       <p className="mt-3 text-sm font-semibold text-muted">{lesson.date} 00:00 공개</p>
                     </div>
 
-                    {open ? (
+                    {availability === "open" ? (
                       <div className="grid gap-6 xl:grid-cols-2">
                         {lesson.videos?.map((video) => (
                           <div key={video.label}>
@@ -267,8 +307,14 @@ export default async function PortalPage() {
                       <div className="flex min-h-44 items-center gap-4 border border-line px-5 py-6">
                         <LockKeyhole aria-hidden="true" className="h-6 w-6 shrink-0 text-muted" />
                         <div>
-                          <p className="font-black">아직 공개되지 않은 강의입니다.</p>
-                          <p className="mt-2 text-sm font-medium text-muted">{lesson.date} 00:00부터 시청할 수 있습니다.</p>
+                          <p className="font-black">
+                            {availability === "closed" ? "시청 기간이 종료된 강의입니다." : "아직 공개되지 않은 강의입니다."}
+                          </p>
+                          <p className="mt-2 text-sm font-medium text-muted">
+                            {availability === "closed"
+                              ? `${formatDateKey(closeDateKey)} 00:00에 시청이 종료되었습니다.`
+                              : `${lesson.date} 00:00부터 7일간 시청할 수 있습니다.`}
+                          </p>
                         </div>
                       </div>
                     )}

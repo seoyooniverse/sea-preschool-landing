@@ -120,22 +120,3 @@ export async function notifyNewApplication(application: Application) {
   }
 }
 
-export async function notifyApplicationApproved(application: Application) {
-  const config = getSolapiConfig();
-
-  if (!config) {
-    console.warn("Solapi approval notification skipped: missing SOLAPI_API_KEY, SOLAPI_API_SECRET, or SOLAPI_FROM.");
-    return;
-  }
-
-  const text = [
-    `${application.name}님, SEA 프리스쿨 ${programInfo.cohort} 등록이 완료되었습니다.`,
-    "수강료 입금 확인까지 정상 처리되었습니다.",
-    "신청서도 운영팀에서 확인 완료했습니다.",
-    `개강일: ${programInfo.startsAt}`,
-    "수업 안내와 접속 링크는 개강 전 순차적으로 보내드릴게요.",
-    `접수번호: ${application.id.slice(0, 8)}`,
-  ].join("\n");
-
-  await sendSolapiMessage(config, application.phone, text);
-}

@@ -1,6 +1,5 @@
 import { readApplications } from "@/lib/applications";
 import { normalizeCohort } from "@/lib/cohorts";
-import { notifyApplicationApproved } from "@/lib/notifications";
 import { PORTAL_PREVIEW_EMAIL, enrollStudentFromApplication, normalizeEmail, readStudents } from "@/lib/students";
 import { readSubmissions } from "@/lib/submissions";
 import { cookies } from "next/headers";
@@ -32,12 +31,6 @@ async function approveStudent(formData: FormData) {
       redirect(`/admin?key=${encodeURIComponent(key)}&error=approval`);
     }
 
-    try {
-      await notifyApplicationApproved(application);
-    } catch (error) {
-      console.error(error);
-      redirect(`/admin?key=${encodeURIComponent(key)}&error=sms`);
-    }
   }
 
   redirect(`/admin?key=${encodeURIComponent(key)}`);
@@ -118,11 +111,6 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             {params.error === "approval" ? (
               <div className="mb-6 border border-signal/40 bg-signal/10 p-4 text-sm font-bold leading-6 text-smoke">
                 승인 저장에 실패했습니다. Supabase에 `students` 테이블이 만들어져 있는지 확인해주세요.
-              </div>
-            ) : null}
-            {params.error === "sms" ? (
-              <div className="mb-6 border border-signal/40 bg-signal/10 p-4 text-sm font-bold leading-6 text-smoke">
-                수강생 승인은 완료됐지만 등록 완료 문자 발송에 실패했습니다. Solapi 환경변수와 발신번호 설정을 확인해주세요.
               </div>
             ) : null}
             <div className="mb-6 flex flex-col gap-4 border-y border-line py-5 sm:flex-row sm:items-center sm:justify-between">
