@@ -1,138 +1,42 @@
-import { ArrowRight, Bell, CalendarDays, CheckCircle2, Clock3, ExternalLink, FileText, Link2, MessageSquareText, UploadCloud, Video } from "lucide-react";
+import {
+  ArrowRight,
+  Bell,
+  CalendarDays,
+  CheckCircle2,
+  Clock3,
+  ExternalLink,
+  LockKeyhole,
+  MessageSquareText,
+  PlayCircle,
+  Radio,
+  Video,
+} from "lucide-react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { augustCurriculumWeeks, curriculumWeeks, julyCurriculumWeeks } from "@/lib/content";
-import { isAugustCohort, isSeptemberCohort, normalizeCohort } from "@/lib/cohorts";
+import { normalizeCohort } from "@/lib/cohorts";
+import { getPortalLessons, type PortalLesson } from "@/lib/portal-lessons";
 import { findActiveStudentByEmail } from "@/lib/students";
-import { SubmissionForm } from "@/components/submission-form";
 
 const quickActions = [
-  { label: "Zoom 입장", icon: Video, href: "#" },
-  { label: "과제 제출", icon: UploadCloud, href: "#assignments" },
+  { label: "인강 보기", icon: PlayCircle, href: "#lectures" },
+  { label: "일정 보기", icon: CalendarDays, href: "#schedule" },
   { label: "공지 확인", icon: Bell, href: "#notices" },
 ];
 
-type CurriculumWeek = {
-  week: string;
-  date: string;
-  time: string;
-  mode: string;
-  title: string;
-  detail?: string;
-};
-
-function dateKeyFromKoreanDate(value: string) {
-  const match = value.match(/(\d{4})\.(\d{2})\.(\d{2})/);
-  if (!match) {
-    return 0;
-  }
-
-  return Number(`${match[1]}${match[2]}${match[3]}`);
-}
-
 function todayKeyInSeoul() {
-  const formatter = new Intl.DateTimeFormat("en-CA", {
+  const parts = new Intl.DateTimeFormat("ko-KR", {
     timeZone: "Asia/Seoul",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  });
-  return Number(formatter.format(new Date()).replaceAll("-", ""));
+  }).formatToParts(new Date());
+  const value = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+
+  return Number(`${value.year}${value.month}${value.day}`);
 }
 
-function getUpcomingWeeks(weeks: CurriculumWeek[]) {
-  const todayKey = todayKeyInSeoul();
-  const nextIndex = weeks.findIndex((week) => dateKeyFromKoreanDate(week.date) >= todayKey);
-  const startIndex = nextIndex >= 0 ? nextIndex : Math.max(weeks.length - 1, 0);
-
-  return weeks.slice(startIndex, startIndex + 4);
-}
-
-function getAssignments(currentCohort: "july" | "august" | "september") {
-  if (currentCohort === "september") {
-    return [
-      {
-        title: "시장 분석 리포트 초안",
-        due: "2026.09.14 23:59",
-        status: "제출 전",
-        tone: "signal",
-        body: "선택한 아티스트와 경쟁 레퍼런스 3팀의 포지션을 비교해 주세요.",
-      },
-      {
-        title: "브랜드 코어 시트",
-        due: "2026.09.21 23:59",
-        status: "예정",
-        tone: "muted",
-        body: "타깃 팬덤, 콘셉트 키워드, 차별화 포인트를 한 페이지로 정리합니다.",
-      },
-      {
-        title: "수강 오리엔테이션 확인",
-        due: "2026.09.01 19:30",
-        status: "완료",
-        tone: "complete",
-        body: "Zoom 접속명과 과제 제출 규칙 확인을 마쳤습니다.",
-      },
-    ];
-  }
-
-  return currentCohort === "august"
-    ? [
-        {
-          title: "시장 분석 리포트 초안",
-          due: "2026.08.16 23:59",
-          status: "제출 전",
-          tone: "signal",
-          body: "선택한 아티스트와 경쟁 레퍼런스 3팀의 포지션을 비교해 주세요.",
-        },
-        {
-          title: "브랜드 코어 시트",
-          due: "2026.08.23 23:59",
-          status: "예정",
-          tone: "muted",
-          body: "타깃 팬덤, 콘셉트 키워드, 차별화 포인트를 한 페이지로 정리합니다.",
-        },
-        {
-          title: "수강 오리엔테이션 확인",
-          due: "2026.08.03 19:30",
-          status: "완료",
-          tone: "complete",
-          body: "Zoom 접속명과 과제 제출 규칙 확인을 마쳤습니다.",
-        },
-      ]
-    : [
-        {
-          title: "장르와 악곡의 언어 과제",
-          due: "2026.08.17 23:59",
-          status: "제출 전",
-          tone: "signal",
-          body: "레퍼런스 곡 3개를 고르고, 사운드 방향을 기획 언어로 정리해 주세요.",
-        },
-        {
-          title: "프리프로덕션 워크숍 준비",
-          due: "2026.08.18 수업 전",
-          status: "예정",
-          tone: "muted",
-          body: "선택한 아티스트의 콘셉트, 타깃, 핵심 무드를 한 페이지로 가져옵니다.",
-        },
-        {
-          title: "브랜드 코어 시트",
-          due: "2026.07.27 23:59",
-          status: "완료",
-          tone: "complete",
-          body: "타깃 팬덤, 콘셉트 키워드, 차별화 포인트 정리를 마쳤습니다.",
-        },
-      ];
-}
-
-function StatusPill({ status, tone }: { status: string; tone: string }) {
-  const className =
-    tone === "complete"
-      ? "border-bone/20 bg-bone text-ink"
-      : tone === "signal"
-        ? "border-signal/40 bg-signal/10 text-signal"
-        : "border-line bg-transparent text-muted";
-
-  return <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-black ${className}`}>{status}</span>;
+function getNextLesson(lessons: PortalLesson[], todayKey: number) {
+  return lessons.find((lesson) => lesson.dateKey >= todayKey) ?? lessons[lessons.length - 1] ?? null;
 }
 
 export default async function PortalPage() {
@@ -145,18 +49,14 @@ export default async function PortalPage() {
   }
 
   const cohort = normalizeCohort(student.cohort);
-  const septemberCohort = isSeptemberCohort(cohort);
-  const augustCohort = isAugustCohort(cohort);
-  const currentCohort = septemberCohort ? "september" : augustCohort ? "august" : "july";
-  const weeks = septemberCohort ? curriculumWeeks : augustCohort ? augustCurriculumWeeks : julyCurriculumWeeks;
-  const upcomingWeeks = getUpcomingWeeks(weeks);
-  const nextClass = upcomingWeeks[0] ?? weeks[weeks.length - 1];
-  const regularDay = augustCohort ? "매주 월요일" : "매주 화요일";
-  const assignments = getAssignments(currentCohort);
+  const lessons = getPortalLessons(cohort);
+  const todayKey = todayKeyInSeoul();
+  const nextLesson = getNextLesson(lessons, todayKey);
+  const videoLessons = lessons.filter((lesson) => lesson.mode === "인강");
   const notices = [
-    `온라인 수업은 ${regularDay} 20:00에 같은 Zoom 링크로 입장합니다.`,
-    "과제는 마감 전까지 파일 또는 공유 링크로 제출할 수 있습니다.",
-    "오프라인 실습 장소와 준비물은 해당 주차 3일 전 별도 공지됩니다.",
+    "인강은 각 기수별 공개일 00:00부터 이 페이지에서 시청할 수 있습니다.",
+    "공개된 인강은 과정 종료일까지 반복해서 시청할 수 있습니다.",
+    "실시간 수업 접속 링크는 수업 전 별도 공지됩니다.",
   ];
 
   async function logout() {
@@ -171,26 +71,24 @@ export default async function PortalPage() {
     <main className="min-h-screen bg-ink text-bone">
       <div className="noise" aria-hidden="true" />
 
-      <header className="sticky top-0 z-40 border-b border-line bg-ink/78 backdrop-blur-xl">
-        <nav className="mx-auto flex h-16 max-w-page items-center justify-between px-[var(--page-x)]" aria-label="Portal navigation">
+      <header className="sticky top-0 z-40 border-b border-line bg-ink/90 backdrop-blur-lg">
+        <nav className="mx-auto flex h-16 max-w-page items-center justify-between px-[var(--page-x)]" aria-label="수강 포털 메뉴">
           <a href="/" className="brand-logo text-[13px] leading-tight text-bone sm:text-sm">
             MJU x SEA 수강 포털
           </a>
           <div className="hidden items-center gap-6 md:flex">
-            <a href="#class" className="text-xs font-semibold text-muted transition hover:text-bone">
-              수업
+            <a href="#lectures" className="text-xs font-semibold text-muted transition hover:text-bone">
+              인강
             </a>
-            <a href="#assignments" className="text-xs font-semibold text-muted transition hover:text-bone">
-              과제
+            <a href="#schedule" className="text-xs font-semibold text-muted transition hover:text-bone">
+              일정
             </a>
             <a href="#notices" className="text-xs font-semibold text-muted transition hover:text-bone">
               공지
             </a>
           </div>
           <form action={logout}>
-            <button
-              className="rounded-full border border-line px-4 py-2 text-xs font-bold transition hover:border-bone hover:bg-bone hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
-            >
+            <button className="rounded-lg border border-line px-4 py-2 text-xs font-bold transition hover:border-bone hover:bg-bone hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal">
               로그아웃
             </button>
           </form>
@@ -199,125 +97,194 @@ export default async function PortalPage() {
 
       <section className="mx-auto grid max-w-page gap-8 px-[var(--page-x)] pb-10 pt-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:pb-16 lg:pt-14">
         <div>
-          <p className="mb-5 flex items-center gap-3 text-xs font-black uppercase tracking-[0.18em] text-signal">
-            <span className="h-px w-8 bg-signal" aria-hidden="true" />
-            Student Home
-          </p>
-          <h1 className="max-w-[840px] text-[clamp(2.25rem,6vw,5.4rem)] font-black leading-[1.08] [word-break:keep-all]">
-            오늘 수업 링크와
-            <span className="block text-smoke">이번 주 과제만 빠르게.</span>
+          <p className="mb-4 text-sm font-black text-signal">{cohort}</p>
+          <h1 className="max-w-[760px] text-[clamp(2.1rem,5vw,4.2rem)] font-black leading-[1.1] [word-break:keep-all]">
+            공개된 인강과 남은 일정을
+            <span className="block text-smoke">한곳에서 확인하세요.</span>
           </h1>
-          <p className="mt-6 max-w-read text-base font-medium leading-7 text-smoke sm:text-lg">
-            {student.name}님은 {cohort}입니다. Zoom으로 진행되는 {regularDay} 수업 일정, 공지, 제출 상태를 한 화면에서 관리합니다.
+          <p className="mt-5 max-w-read text-base font-medium leading-7 text-smoke">
+            {student.name}님, 인강은 각 기수의 공개일부터 바로 시청할 수 있습니다. 실시간 수업 링크는 수업 전 별도로 안내됩니다.
           </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             {quickActions.map((item) => {
               const Icon = item.icon;
               return (
                 <a
                   key={item.label}
                   href={item.href}
-                  className="group inline-flex min-h-14 items-center justify-center gap-2 rounded-full border border-line px-6 text-sm font-black transition hover:border-bone hover:bg-bone hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-line px-5 text-sm font-black transition hover:border-bone hover:bg-bone hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
                 >
                   <Icon aria-hidden="true" className="h-4 w-4" />
                   {item.label}
-                  <ArrowRight aria-hidden="true" className="h-4 w-4 transition group-hover:translate-x-1" />
+                  <ArrowRight aria-hidden="true" className="h-4 w-4" />
                 </a>
               );
             })}
           </div>
         </div>
 
-        <aside id="class" className="border-y border-line py-6 lg:border lg:p-6">
-          <div className="flex items-center justify-between gap-4">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-muted">Next Class</p>
-            <span className="rounded-full bg-signal px-3 py-1 text-xs font-black text-bone">{nextClass.mode}</span>
-          </div>
-          <h2 className="mt-6 text-3xl font-black leading-tight [word-break:keep-all]">{nextClass.title}</h2>
-          <dl className="mt-6 grid gap-3 text-sm font-semibold text-smoke">
-            <div className="flex items-center gap-3">
-              <CalendarDays aria-hidden="true" className="h-4 w-4 text-signal" />
-              <dt className="sr-only">일정</dt>
-              <dd>{nextClass.date}</dd>
-            </div>
-            <div className="flex items-center gap-3">
-              <Clock3 aria-hidden="true" className="h-4 w-4 text-signal" />
-              <dt className="sr-only">시간</dt>
-              <dd>{nextClass.time}</dd>
-            </div>
-            <div className="flex items-center gap-3">
-              <Link2 aria-hidden="true" className="h-4 w-4 text-signal" />
-              <dt className="sr-only">링크</dt>
-              <dd>Zoom 고정 링크</dd>
-            </div>
-          </dl>
-          <a
-            href="#"
-            className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-bone px-5 text-sm font-black text-ink transition hover:bg-signal hover:text-bone focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
-          >
-            Zoom 수업 입장
-            <ExternalLink aria-hidden="true" className="h-4 w-4" />
-          </a>
+        <aside className="border-y border-line py-6 lg:border lg:p-6">
+          {nextLesson ? (
+            <>
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-xs font-black text-muted">다음 일정</p>
+                <span className="rounded-md bg-signal px-3 py-1 text-xs font-black text-bone">{nextLesson.mode}</span>
+              </div>
+              <p className="mt-6 text-sm font-black text-signal">{nextLesson.week} · {nextLesson.instructor}</p>
+              <h2 className="mt-2 text-3xl font-black leading-tight [word-break:keep-all]">{nextLesson.title}</h2>
+              <dl className="mt-6 grid gap-3 text-sm font-semibold text-smoke">
+                <div className="flex items-center gap-3">
+                  <CalendarDays aria-hidden="true" className="h-4 w-4 text-signal" />
+                  <dt className="sr-only">일정</dt>
+                  <dd>{nextLesson.date}</dd>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Clock3 aria-hidden="true" className="h-4 w-4 text-signal" />
+                  <dt className="sr-only">시간</dt>
+                  <dd>{nextLesson.time}</dd>
+                </div>
+              </dl>
+              {nextLesson.mode === "인강" && nextLesson.dateKey <= todayKey ? (
+                <a
+                  href={`#lesson-${nextLesson.week}`}
+                  className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-bone px-5 text-sm font-black text-ink transition hover:bg-signal hover:text-bone focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal"
+                >
+                  인강 바로 보기
+                  <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                </a>
+              ) : (
+                <p className="mt-7 border-t border-line pt-4 text-sm font-bold leading-6 text-muted">
+                  {nextLesson.mode === "실시간" ? "접속 링크는 수업 전 별도 공지됩니다." : `${nextLesson.date} 00:00에 공개됩니다.`}
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="text-sm font-bold leading-6 text-muted">현재 추가로 예정된 수업이 없습니다.</p>
+          )}
         </aside>
       </section>
 
-      <section className="border-y border-line">
-        <div className="mx-auto grid max-w-page gap-0 px-[var(--page-x)] lg:grid-cols-4">
-          {upcomingWeeks.map((week) => (
-            <article key={week.week} className="border-line py-6 lg:border-r lg:px-6 lg:first:pl-0 lg:last:border-r-0 lg:last:pr-0">
-              <p className="text-xs font-black text-signal">{week.week}</p>
-              <h2 className="mt-3 min-h-14 text-lg font-black leading-tight [word-break:keep-all]">{week.title}</h2>
-              <p className="mt-4 text-sm font-semibold text-muted">
-                {week.date} · {week.time}
-              </p>
-            </article>
-          ))}
+      <section id="schedule" className="border-y border-line">
+        <div className="mx-auto max-w-page px-[var(--page-x)] py-12 lg:py-16">
+          <div className="mb-7">
+            <h2 className="text-3xl font-black">남은 수업 일정</h2>
+            <p className="mt-2 text-sm font-medium text-muted">기수에 맞는 일정만 표시됩니다.</p>
+          </div>
+
+          {lessons.length ? (
+            <div className="divide-y divide-line border-y border-line">
+              {lessons.map((lesson) => {
+                const open = lesson.mode === "인강" && lesson.dateKey <= todayKey;
+
+                return (
+                  <article key={lesson.week} className="grid gap-4 py-6 md:grid-cols-[110px_minmax(0,1fr)_180px] md:items-center">
+                    <div>
+                      <p className="text-sm font-black text-signal">{lesson.week}</p>
+                      <p className="mt-1 text-xs font-bold text-muted">{lesson.mode}</p>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black leading-tight [word-break:keep-all]">{lesson.title}</h3>
+                      <p className="mt-2 text-sm font-semibold text-smoke">{lesson.instructor}</p>
+                    </div>
+                    <div className="md:text-right">
+                      <p className="text-sm font-black">{lesson.date}</p>
+                      <p className="mt-1 text-xs font-semibold text-muted">{lesson.time}</p>
+                      {lesson.mode === "인강" ? (
+                        <p className={`mt-2 text-xs font-black ${open ? "text-signal" : "text-muted"}`}>{open ? "시청 가능" : "공개 예정"}</p>
+                      ) : (
+                        <p className="mt-2 text-xs font-black text-signal">실시간 수업</p>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="border-y border-line py-6 text-sm font-medium text-muted">해당 기수의 남은 수업 일정이 없습니다.</p>
+          )}
         </div>
       </section>
 
-      <section id="assignments" className="mx-auto grid max-w-page gap-10 px-[var(--page-x)] py-16 lg:grid-cols-[0.72fr_1.28fr] lg:py-24">
-        <div>
-          <p className="mb-6 flex items-center gap-3 text-xs font-black uppercase tracking-[0.18em] text-muted">
-            <span className="h-px w-8 bg-signal" aria-hidden="true" />
-            Assignments
-          </p>
-          <h2 className="text-[clamp(2rem,4.6vw,4.5rem)] font-black leading-[1.1] [word-break:keep-all]">
-            제출해야 할 것만
-            <span className="block text-signal">선명하게.</span>
-          </h2>
+      <section id="lectures" className="mx-auto max-w-page px-[var(--page-x)] py-16 lg:py-24">
+        <div className="mb-10">
+          <div className="flex items-center gap-3 text-signal">
+            <Video aria-hidden="true" className="h-5 w-5" />
+            <p className="text-sm font-black">온라인 강의</p>
+          </div>
+          <h2 className="mt-3 text-[clamp(2rem,4vw,3.8rem)] font-black leading-[1.1] [word-break:keep-all]">공개된 강의를 바로 시청하세요.</h2>
         </div>
 
-        <div className="divide-y divide-line border-y border-line">
-          {assignments.map((assignment) => (
-            <article key={assignment.title} className="grid gap-5 py-6 md:grid-cols-[minmax(0,1fr)_280px] md:items-start">
-              <div>
-                <div className="mb-4 flex flex-wrap items-center gap-3">
-                  <FileText aria-hidden="true" className="h-5 w-5 text-signal" />
-                  <StatusPill status={assignment.status} tone={assignment.tone} />
-                </div>
-                <h3 className="text-2xl font-black leading-tight [word-break:keep-all]">{assignment.title}</h3>
-                <p className="mt-3 max-w-read text-sm font-medium leading-6 text-muted">{assignment.body}</p>
-                <p className="mt-4 text-xs font-bold text-smoke">마감 {assignment.due}</p>
-              </div>
-              {assignment.status === "완료" ? (
-                <p className="rounded-full border border-line px-4 py-3 text-center text-xs font-black text-muted">제출 완료 처리됨</p>
-              ) : (
-                <SubmissionForm assignmentTitle={assignment.title} />
-              )}
-            </article>
-          ))}
-        </div>
+        {videoLessons.length ? (
+          <div className="divide-y divide-line border-y border-line">
+            {videoLessons.map((lesson) => {
+              const open = lesson.dateKey <= todayKey;
+
+              return (
+                <article id={`lesson-${lesson.week}`} key={lesson.week} className="scroll-mt-24 py-8 lg:py-10">
+                  <div className="grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)]">
+                    <div>
+                      <p className="text-sm font-black text-signal">{lesson.week} · {lesson.instructor}</p>
+                      <h3 className="mt-2 text-2xl font-black leading-tight [word-break:keep-all]">{lesson.title}</h3>
+                      <p className="mt-3 text-sm font-semibold text-muted">{lesson.date} 00:00 공개</p>
+                    </div>
+
+                    {open ? (
+                      <div className="grid gap-6 xl:grid-cols-2">
+                        {lesson.videos?.map((video) => (
+                          <div key={video.label}>
+                            <div className="aspect-video overflow-hidden border border-line bg-black">
+                              <iframe
+                                src={video.embedUrl}
+                                title={video.label}
+                                className="h-full w-full"
+                                loading="lazy"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                              />
+                            </div>
+                            <div className="mt-3 flex items-center justify-between gap-3">
+                              <p className="text-sm font-black">{video.label}</p>
+                              <a
+                                href={video.watchUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 text-xs font-bold text-muted transition hover:text-bone"
+                              >
+                                YouTube에서 보기
+                                <ExternalLink aria-hidden="true" className="h-3.5 w-3.5" />
+                              </a>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex min-h-44 items-center gap-4 border border-line px-5 py-6">
+                        <LockKeyhole aria-hidden="true" className="h-6 w-6 shrink-0 text-muted" />
+                        <div>
+                          <p className="font-black">아직 공개되지 않은 강의입니다.</p>
+                          <p className="mt-2 text-sm font-medium text-muted">{lesson.date} 00:00부터 시청할 수 있습니다.</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="border-y border-line py-6 text-sm font-medium text-muted">현재 이 기수에 공개 예정인 인강이 없습니다.</p>
+        )}
       </section>
 
       <section id="notices" className="mx-auto max-w-page px-[var(--page-x)] pb-16 lg:pb-24">
         <div className="grid gap-8 border-t border-line pt-8 lg:grid-cols-[0.85fr_1.15fr]">
           <div>
-            <p className="mb-5 flex items-center gap-3 text-xs font-black uppercase tracking-[0.18em] text-muted">
-              <span className="h-px w-8 bg-signal" aria-hidden="true" />
-              Notices
-            </p>
-            <h2 className="text-3xl font-black leading-tight [word-break:keep-all]">수업 전 확인할 공지</h2>
+            <div className="flex items-center gap-3 text-signal">
+              <Radio aria-hidden="true" className="h-5 w-5" />
+              <p className="text-sm font-black">수업 공지</p>
+            </div>
+            <h2 className="mt-3 text-3xl font-black leading-tight [word-break:keep-all]">수강 전 확인해주세요.</h2>
           </div>
           <div className="grid gap-3">
             {notices.map((notice) => (
@@ -332,10 +299,10 @@ export default async function PortalPage() {
 
       <footer className="border-t border-line px-[var(--page-x)] py-8">
         <div className="mx-auto flex max-w-page flex-col gap-3 text-xs font-semibold text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>MJU x SEA Student Portal Prototype</p>
+          <p>MJU x SEA 수강 포털</p>
           <p className="flex items-center gap-2">
             <CheckCircle2 aria-hidden="true" className="h-4 w-4 text-signal" />
-            Zoom 수업 운영에 맞춘 MVP 화면
+            기수별 수업 일정과 인강 제공
           </p>
         </div>
       </footer>
