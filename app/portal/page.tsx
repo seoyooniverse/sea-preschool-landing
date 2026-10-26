@@ -11,6 +11,7 @@ import {
   Radio,
   Video,
 } from "lucide-react";
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { normalizeCohort } from "@/lib/cohorts";
@@ -22,6 +23,10 @@ const quickActions = [
   { label: "일정 보기", icon: CalendarDays, href: "#schedule" },
   { label: "공지 확인", icon: Bell, href: "#notices" },
 ];
+
+export const metadata: Metadata = {
+  title: "SEA 프리스쿨 강의 포털",
+};
 
 function todayKeyInSeoul() {
   const parts = new Intl.DateTimeFormat("ko-KR", {
@@ -74,7 +79,7 @@ export default async function PortalPage() {
       <header className="sticky top-0 z-40 border-b border-line bg-ink/90 backdrop-blur-lg">
         <nav className="mx-auto flex h-16 max-w-page items-center justify-between px-[var(--page-x)]" aria-label="수강 포털 메뉴">
           <a href="/" className="brand-logo text-[13px] leading-tight text-bone sm:text-sm">
-            MJU x SEA 수강 포털
+            SEA 프리스쿨 강의 포털
           </a>
           <div className="hidden items-center gap-6 md:flex">
             <a href="#lectures" className="text-xs font-semibold text-muted transition hover:text-bone">
@@ -97,7 +102,7 @@ export default async function PortalPage() {
 
       <section className="mx-auto grid max-w-page gap-8 px-[var(--page-x)] pb-10 pt-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:pb-16 lg:pt-14">
         <div>
-          <p className="mb-4 text-sm font-black text-signal">{cohort}</p>
+          <p className="mb-4 text-sm font-black text-signal">SEA 프리스쿨 강의 포털</p>
           <h1 className="max-w-[760px] text-[clamp(2.1rem,5vw,4.2rem)] font-black leading-[1.1] [word-break:keep-all]">
             공개된 인강과 남은 일정을
             <span className="block text-smoke">한곳에서 확인하세요.</span>
