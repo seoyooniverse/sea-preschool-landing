@@ -1,13 +1,19 @@
 import { readApplications } from "@/lib/applications";
-import { normalizeCohort } from "@/lib/cohorts";
+import { cohortOptions, normalizeCohort } from "@/lib/cohorts";
+import { createPortalVideo, formatLessonDate, getPortalLessons, savePortalLesson, type PortalLesson } from "@/lib/portal-lessons";
 import { PORTAL_PREVIEW_EMAIL, enrollStudentFromApplication, normalizeEmail, readStudents } from "@/lib/students";
 import { readSubmissions } from "@/lib/submissions";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 type AdminPageProps = {
-  searchParams: Promise<{ error?: string; key?: string }>;
+  searchParams: Promise<{ error?: string; key?: string; saved?: string }>;
 };
+
+function dateInputValue(dateKey: number) {
+  const value = String(dateKey);
+  return `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`;
+}
 
 async function approveStudent(formData: FormData) {
   "use server";
@@ -46,6 +52,11 @@ async function openPortalPreview(formData: FormData) {
     redirect("/admin");
   }
 
+  const cohort = normalizeCohort(String(formData.get("cohort") ?? ""));
+  if (!cohortOptions.includes(cohort)) {
+    redirect(`/admin?key=${encodeURIComponent(key)}&error=preview`);
+  }
+
   const cookieStore = await cookies();
   cookieStore.set("sea_student_email", PORTAL_PREVIEW_EMAIL, {
     httpOnly: true,
@@ -54,8 +65,64 @@ async function openPortalPreview(formData: FormData) {
     path: "/",
     maxAge: 60 * 60 * 2,
   });
+  cookieStore.set("sea_preview_cohort", cohort, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 2,
+  });
 
   redirect("/portal");
+}
+
+async function updatePortalLesson(formData: FormData) {
+  "use server";
+
+  const key = String(formData.get("key") ?? "").trim();
+  const adminKey = (process.env.ADMIN_KEY ?? "sea2026").trim();
+
+  if (key !== adminKey) {
+    redirect("/admin");
+  }
+
+  const cohort = normalizeCohort(String(formData.get("cohort") ?? ""));
+  const week = String(formData.get("week") ?? "").trim();
+  const dateValue = String(formData.get("date") ?? "").replace(/\D/g, "");
+  const dateKey = Number(dateValue);
+  const mode = String(formData.get("mode") ?? "") === "실시간" ? "실시간" : "인강";
+  const title = String(formData.get("title") ?? "").trim();
+  const instructor = String(formData.get("instructor") ?? "").trim();
+  const time = String(formData.get("time") ?? "").trim();
+
+  if (!cohortOptions.includes(cohort) || !week || dateValue.length !== 8 || !title || !instructor || !time) {
+    redirect(`/admin?key=${encodeURIComponent(key)}&error=lesson-input`);
+  }
+
+  try {
+    const videoUrls = [String(formData.get("video1") ?? "").trim(), String(formData.get("video2") ?? "").trim()].filter(Boolean);
+    if (mode === "인강" && videoUrls.length === 0) {
+      throw new Error("온라인 강의에는 YouTube 링크가 필요합니다.");
+    }
+    const videos = mode === "인강" ? videoUrls.map((url, index) => createPortalVideo(`${week} ${index + 1}교시`, url)) : undefined;
+    const lesson: PortalLesson = {
+      week,
+      date: formatLessonDate(dateKey),
+      dateKey,
+      time,
+      mode,
+      instructor,
+      title,
+      videos,
+    };
+
+    await savePortalLesson(cohort, lesson);
+  } catch (error) {
+    console.error(error);
+    redirect(`/admin?key=${encodeURIComponent(key)}&error=lesson-save`);
+  }
+
+  redirect(`/admin?key=${encodeURIComponent(key)}&saved=${encodeURIComponent(`${cohort} ${week}`)}`);
 }
 
 export default async function AdminPage({ searchParams }: AdminPageProps) {
@@ -67,12 +134,16 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   let applications: Awaited<ReturnType<typeof readApplications>> = [];
   let students: Awaited<ReturnType<typeof readStudents>> = [];
   let submissions: Awaited<ReturnType<typeof readSubmissions>> = [];
+  let lessonGroups: Array<{ cohort: string; lessons: PortalLesson[] }> = [];
 
   if (authorized) {
     try {
       applications = await readApplications();
       students = await readStudents();
       submissions = await readSubmissions();
+      lessonGroups = await Promise.all(
+        cohortOptions.map(async (cohort) => ({ cohort, lessons: await getPortalLessons(cohort) })),
+      );
     } catch (error) {
       console.error(error);
       dataError = true;
@@ -113,18 +184,117 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                 승인 저장에 실패했습니다. Supabase에 `students` 테이블이 만들어져 있는지 확인해주세요.
               </div>
             ) : null}
+            {params.error === "lesson-save" ? (
+              <div className="mb-6 border border-signal/40 bg-signal/10 p-4 text-sm font-bold leading-6 text-smoke">
+                강의 저장에 실패했습니다. Supabase에 `portal_lessons` 테이블을 생성했는지 확인해주세요.
+              </div>
+            ) : null}
+            {params.error === "lesson-input" ? (
+              <div className="mb-6 border border-signal/40 bg-signal/10 p-4 text-sm font-bold leading-6 text-smoke">
+                강의 정보를 모두 정확하게 입력해주세요. 인강에는 올바른 YouTube 링크가 필요합니다.
+              </div>
+            ) : null}
+            {params.saved ? (
+              <div className="mb-6 border border-bone/20 bg-bone/10 p-4 text-sm font-bold leading-6 text-smoke">
+                {params.saved} 강의 정보를 저장했습니다.
+              </div>
+            ) : null}
             <div className="mb-6 flex flex-col gap-4 border-y border-line py-5 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-col gap-2 text-sm font-bold text-muted sm:flex-row sm:gap-6">
                 <p>총 {applications.length}건 접수</p>
                 <p>포털 로그인 가능 수강생 {students.length}명</p>
               </div>
-              <form action={openPortalPreview}>
+              <form action={openPortalPreview} className="flex flex-col gap-2 sm:flex-row">
                 <input type="hidden" name="key" value={enteredKey} />
+                <select
+                  name="cohort"
+                  defaultValue={cohortOptions[0]}
+                  className="min-h-11 rounded-lg border border-line bg-ink px-3 text-sm font-bold text-bone outline-none focus:border-bone"
+                >
+                  {cohortOptions.map((cohort) => (
+                    <option key={cohort} value={cohort} className="bg-ink text-bone">
+                      {cohort}
+                    </option>
+                  ))}
+                </select>
                 <button className="inline-flex min-h-11 items-center justify-center rounded-lg bg-bone px-5 text-sm font-black text-ink transition hover:bg-signal hover:text-bone">
                   강의 포털 테스트
                 </button>
               </form>
             </div>
+            <section className="mb-16">
+              <div className="mb-6">
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-signal">Lecture Manager</p>
+                <h2 className="mt-2 text-3xl font-black">강의 관리</h2>
+                <p className="mt-2 text-sm font-medium leading-6 text-muted">
+                  저장한 내용은 해당 기수 학생 포털에 바로 반영됩니다. 인강은 공개일부터 7일간 열립니다.
+                </p>
+              </div>
+
+              <div className="divide-y divide-line border-y border-line">
+                {lessonGroups.map(({ cohort, lessons }) => (
+                  <details key={cohort} className="group py-5" open={cohort === cohortOptions[0]}>
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-xl font-black">
+                      {cohort}
+                      <span className="text-sm text-muted transition group-open:rotate-45">+</span>
+                    </summary>
+                    <div className="mt-6 divide-y divide-line border-t border-line">
+                      {lessons.map((lesson) => (
+                        <form key={lesson.week} action={updatePortalLesson} className="grid gap-5 py-7">
+                          <input type="hidden" name="key" value={enteredKey} />
+                          <input type="hidden" name="cohort" value={cohort} />
+                          <input type="hidden" name="week" value={lesson.week} />
+
+                          <div className="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                              <p className="text-sm font-black text-signal">{lesson.week}</p>
+                              <p className="mt-1 text-xs font-semibold text-muted">현재 {lesson.date} · {lesson.mode}</p>
+                            </div>
+                            <button className="min-h-10 rounded-lg border border-line px-5 text-xs font-black transition hover:border-bone hover:bg-bone hover:text-ink">
+                              저장
+                            </button>
+                          </div>
+
+                          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                            <label className="grid gap-2 lg:col-span-2">
+                              <span className="text-xs font-black text-muted">강의명</span>
+                              <input name="title" defaultValue={lesson.title} required className="min-h-11 border border-line bg-transparent px-3 text-sm font-semibold outline-none focus:border-bone" />
+                            </label>
+                            <label className="grid gap-2">
+                              <span className="text-xs font-black text-muted">강사</span>
+                              <input name="instructor" defaultValue={lesson.instructor} required className="min-h-11 border border-line bg-transparent px-3 text-sm font-semibold outline-none focus:border-bone" />
+                            </label>
+                            <label className="grid gap-2">
+                              <span className="text-xs font-black text-muted">진행 방식</span>
+                              <select name="mode" defaultValue={lesson.mode} className="min-h-11 border border-line bg-ink px-3 text-sm font-semibold outline-none focus:border-bone">
+                                <option value="인강">인강</option>
+                                <option value="실시간">실시간</option>
+                              </select>
+                            </label>
+                            <label className="grid gap-2">
+                              <span className="text-xs font-black text-muted">날짜</span>
+                              <input name="date" type="date" defaultValue={dateInputValue(lesson.dateKey)} required className="min-h-11 border border-line bg-transparent px-3 text-sm font-semibold outline-none focus:border-bone" />
+                            </label>
+                            <label className="grid gap-2">
+                              <span className="text-xs font-black text-muted">시간 또는 공개 문구</span>
+                              <input name="time" defaultValue={lesson.time} required className="min-h-11 border border-line bg-transparent px-3 text-sm font-semibold outline-none focus:border-bone" />
+                            </label>
+                            <label className="grid gap-2 lg:col-span-2">
+                              <span className="text-xs font-black text-muted">YouTube 1교시</span>
+                              <input name="video1" type="url" defaultValue={lesson.videos?.[0]?.watchUrl ?? ""} placeholder="https://youtu.be/..." className="min-h-11 border border-line bg-transparent px-3 text-sm font-semibold outline-none placeholder:text-muted focus:border-bone" />
+                            </label>
+                            <label className="grid gap-2 lg:col-span-2">
+                              <span className="text-xs font-black text-muted">YouTube 2교시</span>
+                              <input name="video2" type="url" defaultValue={lesson.videos?.[1]?.watchUrl ?? ""} placeholder="https://youtu.be/..." className="min-h-11 border border-line bg-transparent px-3 text-sm font-semibold outline-none placeholder:text-muted focus:border-bone" />
+                            </label>
+                          </div>
+                        </form>
+                      ))}
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </section>
             <section className="mb-12">
               <h2 className="text-2xl font-black">과제 제출물</h2>
               <div className="mt-5 divide-y divide-line border-y border-line">

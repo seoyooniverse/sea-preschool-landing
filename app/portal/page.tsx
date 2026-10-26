@@ -84,8 +84,9 @@ export default async function PortalPage() {
     redirect("/login");
   }
 
-  const cohort = normalizeCohort(student.cohort);
-  const lessons = getPortalLessons(cohort);
+  const previewCohort = cookieStore.get("sea_preview_cohort")?.value;
+  const cohort = normalizeCohort(student.role === "admin" && previewCohort ? previewCohort : student.cohort);
+  const lessons = await getPortalLessons(cohort);
   const todayKey = todayKeyInSeoul();
   const previewAllVideos = student.role === "admin";
   const nextLesson = getNextLesson(lessons, todayKey);
@@ -102,6 +103,7 @@ export default async function PortalPage() {
 
     const nextCookies = await cookies();
     nextCookies.delete("sea_student_email");
+    nextCookies.delete("sea_preview_cohort");
     redirect("/login");
   }
 

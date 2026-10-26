@@ -38,6 +38,22 @@ create table if not exists public.students (
 
 alter table public.students enable row level security;
 
+create table if not exists public.portal_lessons (
+  cohort text not null,
+  week text not null,
+  date text not null,
+  date_key integer not null,
+  time text not null,
+  mode text not null check (mode in ('인강', '실시간')),
+  instructor text not null,
+  title text not null,
+  videos jsonb,
+  updated_at timestamptz not null default now(),
+  primary key (cohort, week)
+);
+
+alter table public.portal_lessons enable row level security;
+
 create table if not exists public.submissions (
   id uuid primary key,
   created_at timestamptz not null default now(),
@@ -54,6 +70,26 @@ create table if not exists public.submissions (
 );
 
 alter table public.submissions enable row level security;
+```
+
+관리자 페이지에서 강의 일정과 영상 링크를 직접 수정하려면 아래 SQL도 실행합니다.
+
+```sql
+create table if not exists public.portal_lessons (
+  cohort text not null,
+  week text not null,
+  date text not null,
+  date_key integer not null,
+  time text not null,
+  mode text not null check (mode in ('인강', '실시간')),
+  instructor text not null,
+  title text not null,
+  videos jsonb,
+  updated_at timestamptz not null default now(),
+  primary key (cohort, week)
+);
+
+alter table public.portal_lessons enable row level security;
 ```
 
 이미 `applications` 테이블을 만든 뒤라면, 아래 SQL만 한 번 더 실행하면 됩니다.
