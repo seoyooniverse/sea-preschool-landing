@@ -48,7 +48,7 @@ const defaultLessons: Record<string, PortalLesson[]> = {
   [AUGUST_COHORT]: [
     lesson("13강", 20261026, "인강", "문원경 교수", "유통·저작권·퍼블리싱 실무", week13Videos),
     lesson("14강", 20261102, "실시간", "안서윤 교수", "소셜 마케팅 트렌드 & SEO"),
-    lesson("15강", 20261103, "인강", "문원경 교수", "글로벌 역주행 전략", week15Videos),
+    lesson("15강", 20261109, "인강", "문원경 교수", "글로벌 역주행 전략", week15Videos),
   ],
   [SEPTEMBER_COHORT]: [
     lesson("13강", 20261110, "인강", "문원경 교수", "유통·저작권·퍼블리싱 실무", week13Videos),
